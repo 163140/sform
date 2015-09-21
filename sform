@@ -178,13 +178,22 @@ sub m_import {		#tested
 			}
 		}
 		when (/tech ##/) {
-			# not implemented
-			die "Not implemented";
-			#$meta =~ s/^# vim.*//g;
-			#$meta =~ s/^tech\s##//g;
-			#while ($meta =~ /\w*\s##
-
-		}
+			$meta =~ s/^# vim.*//g;
+			$meta =~ s/^tech\s##//g;
+			$meta =~ /(common\s##\s.*common\s##\s.*\n)/s;
+			my $common = $1;
+			$common =~ s/common\s##\s//g;
+			$common =~ s/\s##\s/=/g;
+			while ($meta =~ /((\d*)\s##\s.*\g2\s##\s.*##.*\n)/sg) {
+				my $track_meta = $1;
+				my $fname = $2;
+				$fname = "0" . $fname if $fname < 10;
+				$fname = File::Spec->catfile(META, "track_" . $fname);
+				$track_meta =~ s/^\d*\s##\s//g;
+				$track_meta =~ s/\s##\s/=/g;
+				write_file($fname, $track_meta);
+				write_file($fname, {append => 1}, $common) if defined($common);
+			}
 		when (/tech=\{\}\n\s*common=\{\}/) {
 			# deleting lua-scpecific symbols and intends
 			$meta =~ s/",\n\s*/\n/g;
