@@ -1,0 +1,222 @@
+#!/usr/bin/perl 
+#===============================================================================
+#
+#         FILE:  sform.pl
+#
+#        USAGE:  ./sform.pl  
+#
+#  DESCRIPTION:  simple script for music tagging, renaming and converting
+#
+#      OPTIONS:  ---
+# REQUIREMENTS:  perl 5.20
+#         BUGS:  none
+#        NOTES:  First of all you should prepared metadata. It gather from
+#        		 different sources and put to .metadata directory. Secondary,
+#        		 convert to vorbis audio and write tags. Next one: rename files
+#        		 to hardcoded template and create directory
+#       AUTHOR:  163140@autistici.org, 
+#      COMPANY:  anonimous
+#      VERSION:  0.0
+#      CREATED:  26.05.2015 15:15:23
+#     REVISION:  22
+#     RDEPENDS:  vorbiscomment, oggenc, shntool, File::Slurp, Getopt::Std,
+#     			 File::Spec, Ogg::Vorbis
+#===============================================================================
+
+use 5.020;
+use strict;
+use warnings;
+use autodie;
+use Getopt::Std;
+use utf8;
+use constant META => ".metadata"; #default metadata directory
+use File::Spec;
+use Ogg::Vorbis;
+
+my %options;
+sub HELP_MESSAGE {
+	say <<__HELP__;
+Usage:
+	sform <action> <options> <file(s)>
+	Actions:
+		tag -	(re)tag vorbis files according metadata files in .metadata.
+				Usage: sform tag file1...filen
+
+		rename - rename vorbis audio files according to "tracknum-title" pattern
+				 and create "date-album" directory
+
+		convert - split lossless file (if need) and convert to  vorbis audio.
+			Options:
+				-c - cue-file (mandatory)
+				-q - vorbis audio quality (default 7.5). See man oggenc for
+					 details.
+
+		import - convert metadata files from early versions to new. Currently 
+				 only plain text metadata supported, and simple Lua table
+__HELP__
+}
+
+&HELP_MESSAGE unless getopts('q:c:', \%options);
+my $action = shift;
+
+# check presence and return alfabetical sorted list of metadata
+# files. Usage: &is_meta_present(META)
+sub is_meta_present {
+	my $META = $_[0];
+	mkdir $META unless -d $META;
+	opendir (my $DH, $META);
+	my @files = grep {/track/}  readdir $DH;
+	closedir $DH;
+	return sort @files;
+}
+
+
+
+# action "get"
+# recognize encoding and convert to utf-8
+# extract from cue-file
+# extract from log-file
+# extract from html-file
+sub m_get { say "Not implemented yet" }
+
+
+# action tag: &m_tag (@vorbis_files)
+sub m_tag {
+	my @files = &is_meta_present(META);
+
+	# checking for file presence
+	for (@_) { die "no file $_" unless -e $_ }
+
+	# tagging
+# Hipothesis: order of vorbis files same as alphabetical order of metadata files
+# TODO: make an "smart" tagging that try to find a right metafile for each given
+# vorbis file.
+	my %vorbis_meta;
+	@vorbis_meta{ @_ } = @files;
+	for my $vorbis (keys %vorbis_meta) {
+		my $comment = File::Spec->catfile(META, $vorbis_meta{$vorbis});
+		system ("vorbiscomment", "-w",  "-c", "$comment", "$vorbis")
+			or die "Failed tagging $vorbis: $?";
+	}
+}
+
+
+# action rename
+# &m_rename (vorbis_files)
+sub m_rename {
+	use File::Copy;
+	for (@_) {
+		my $ogg = Ogg::Vorbis->new;
+		open(my $FH, "<", $_);
+		$ogg->open($FH);
+		my %meta = %{$ogg->comment};
+
+		# making a new file and dir names
+		my $name =	($meta{tracknumber} || $meta{TRACKNUMBER})."-".
+					($meta{title} || $meta{TITLE}).".ogg";
+
+		my $dir =	($meta{date} || $meta{DATE})."-".
+					($meta{album} || $meta{ALBUM});
+		die "Metadata problem" if ($dir == "-"	or $name == "-");
+
+		# creating directory "album_year-album_name"
+		mkdir $dir unless -d $dir;
+		$name = File::Spec->catfile($dir, $name);
+		rename $_, $name;
+		move META, File::Spec->catfile($dir, META);
+	}
+}
+
+# action convert: &m_convert (cue_file, vorbis_quality)
+sub m_convert {
+	die "Some wrong..." unless $_[0];
+	my ($cue, $q) = ($_[0], 7.5);
+	$q = $_[1] if $_[1];
+	my $file;
+	open my $FH, "<", $cue;
+	while (<$FH>) {
+		/FILE\s*\"(.*)\"\s*WAVE\s*\n/;
+		$file = $1;
+		last if $file;
+	}
+	# 0 mean normal exit
+	my $res = system("shntool split $file -f $cue -t track_%n -P none -O always");
+	warn "Error while split. Try to get wav-files\n" if $res;
+	my @files = glob "track_*.wav";
+	
+	# TODO make it parallel;
+	for (@files) {
+		system("oggenc -q $q $_");
+	}
+	
+}
+
+# action import: &m_import (old_meta)
+sub m_import {		#tested
+	use File::Slurp;
+	mkdir META unless -d META;
+	my $oldfile = shift;
+	my $meta = read_file($oldfile);
+	my $fname;
+
+	# Old scripts use 4 different metadata formats:
+	# album.meta with <tag></tag> (key: <tech>)
+	# album.meta with ## delimiter (key: tech ##)
+	# meta.lua containing several lua-tables (key: tech={})
+	# meta.lua containing lua table of tables (key: return {\n-- Table)
+	
+	given ($meta) {
+		when (/\/tech/) {
+			$meta =~ s/^\s*//gm;
+			$meta =~ s/_/ /g;
+			$meta =~ s/track /track_/g;
+			$meta =~ m|.*<common>\s*?\n(.*)</common>|s;
+			my $common = $1;
+			while ($meta =~ m|<(track_\d+)>\s*?\n(.*)</\g1>|gs) {
+				$fname = File::Spec->catfile(META, $1);
+				write_file($fname, $2) if defined($2);
+				write_file($fname, {append => 1}, $common) if defined($common);
+			}
+		}
+		when (/tech ##/) {
+			# not implemented
+			die "Not implemented";
+			#$meta =~ s/^# vim.*//g;
+			#$meta =~ s/^tech\s##//g;
+			#while ($meta =~ /\w*\s##
+
+		}
+		when (/tech=\{\}\n\s*common=\{\}/) {
+			# deleting lua-scpecific symbols and intends
+			$meta =~ s/",\n\s*/\n/g;
+			$meta =~ s/=\{\n\s*/=\{\n/g;
+			$meta =~ s/="/=/g;
+
+			# extracting common information
+			$meta =~ /common=\{\n(.*?)\}/s;
+			my $common = $1;
+
+			# extracting track information
+			while ($meta =~ /track\[\d*\]=\{\n(.*?)\}/sg) {
+				my $track_meta = $1;
+				$track_meta =~ /.*tracknumber=(\d*).*/s;
+				$fname = File::Spec->catfile(META, "track_" . $1);
+				write_file($fname, $track_meta);
+				write_file($fname, {append => 1}, $common) if defined($common);
+			}
+		}
+		when (/return\s\{.*\n--\sTable:/) {
+				# not implemented /0z/untagged/Abigail
+				# Williams/2006-Legend/meta.lua
+		}
+	}
+}
+
+given ($action) {
+	when (/tag/)     { &m_tag (@ARGV) }
+	#when (/get/)     { &m_get ($options{c}, $options{h}, $options{l}) }
+	when (/rename/)  { &m_rename (@ARGV) }
+	when (/convert/) { &m_convert ($options{c}, $options{q}) }
+	when (/import/)  { &m_import ($ARGV[0]) }
+	default 		 { &HELP_MESSAGE }
+}
