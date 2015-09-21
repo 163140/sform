@@ -72,15 +72,15 @@ sub is_meta_present {
 
 
 
-# action "get"
+# Action "get"
 # recognize encoding and convert to utf-8
 # extract from cue-file
 # extract from log-file
 # extract from html-file
-sub m_get { say "Not implemented yet" }
+sub m_get { die "Not implemented yet" }
 
 
-# action tag: &m_tag (@vorbis_files)
+# Action tag. Usage: &m_tag (@vorbis_files)
 sub m_tag {
 	my @files = &is_meta_present(META);
 
@@ -101,8 +101,7 @@ sub m_tag {
 }
 
 
-# action rename
-# &m_rename (vorbis_files)
+# Action rename. Usage: &m_rename (vorbis_files)
 sub m_rename {
 	use File::Copy;
 	for (@_) {
@@ -127,7 +126,7 @@ sub m_rename {
 	}
 }
 
-# action convert: &m_convert (cue_file, vorbis_quality)
+# Action convert. Usage: &m_convert (cue_file, vorbis_quality)
 sub m_convert {
 	die "Some wrong..." unless $_[0];
 	my ($cue, $q) = ($_[0], 7.5);
@@ -151,7 +150,7 @@ sub m_convert {
 	
 }
 
-# action import: &m_import (old_meta)
+# Action import. Usage: &m_import (old_meta)
 sub m_import {		#tested
 	use File::Slurp;
 	mkdir META unless -d META;
@@ -214,7 +213,7 @@ sub m_import {		#tested
 
 given ($action) {
 	when (/tag/)     { &m_tag (@ARGV) }
-	#when (/get/)     { &m_get ($options{c}, $options{h}, $options{l}) }
+	when (/get/)     { &m_get ($options{c}, $options{h}, $options{l}) }
 	when (/rename/)  { &m_rename (@ARGV) }
 	when (/convert/) { &m_convert ($options{c}, $options{q}) }
 	when (/import/)  { &m_import ($ARGV[0]) }
