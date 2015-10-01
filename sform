@@ -1,13 +1,12 @@
 #!/usr/bin/perl 
 #===============================================================================
-#
 #        USAGE:  ./sform.pl  
 #  DESCRIPTION:  simple script for music tagging, renaming and converting
 #
 # REQUIREMENTS:  perl 5.20
-#        NOTES:  First of all you should prepared metadata. It gather from
-#        		 different sources and put to .metadata directory. Secondary,
-#        		 convert to vorbis audio and write tags. Next one: rename files
+#        NOTES:  Firstly you should prepared metadata. Gather it from
+#        		 different sources and put to .metadata directory. Secondly,
+#        		 convert to vorbis audio and write tags. Thirdly, rename files
 #        		 to hardcoded template and create directory
 #       AUTHOR:  163140@autistici.org, 
 #      COMPANY:  anonimous
@@ -55,8 +54,8 @@ __HELP__
 &HELP_MESSAGE unless getopts('q:c:', \%options);
 my $action = shift;
 
-# check presence and return alfabetical sorted list of metadata
-# files. Usage: &is_meta_present(META)
+# check presence and return alfabetical sorted list of metadata files.
+# Usage: &is_meta_present(META)
 sub is_meta_present {
 	my $META = $_[0];
 	mkdir $META unless -d $META;
@@ -66,25 +65,22 @@ sub is_meta_present {
 	return sort @files;
 }
 
-
-
 # Action "get"
 # recognize encoding and convert to utf-8
 # extract from CUE, AccuRIP log, MetalMadness Team txt, rutracker.org html
 sub m_get { die "Not implemented" }
 
-
 # Action tag. Usage: &m_tag (@vorbis_files)
 sub m_tag {
 	my @files = &is_meta_present(META);
 
-	# checking for file presence
+	# checking for vorbis files presence
 	for (@_) { die "no file $_" unless -e $_ }
 
 	# tagging
-# Hipothesis: order of vorbis files same as alphabetical order of metadata files
-# TODO: make an "smart" tagging that try to find a right metafile for each given
-# vorbis file.
+	# Hipothesis: order of vorbis files same as alphabetical order of metadata
+	# files. TODO: make an "smart" tagging that try to find a right metafile for
+	# each given vorbis file.
 	my %vorbis_meta;
 	@vorbis_meta{ @_ } = @files;
 	for my $vorbis (keys %vorbis_meta) {
@@ -93,7 +89,6 @@ sub m_tag {
 			or die "Failed tagging $vorbis: $?";
 	}
 }
-
 
 # Action rename. Usage: &m_rename (vorbis_files)
 sub m_rename {
@@ -158,9 +153,9 @@ sub m_import {
 	# meta.lua containing several lua-tables (key: tech={})
 	# meta.lua containing lua table of tables (key: return \{\n-- Table)
 	
-	given ($meta) { ### not tested
+	given ($meta) {
 		when (/<tech>/) {
-			$meta =~ s/^\s*//gm;
+			$meta =~ s/^\s*//mg;
 			$meta =~ s/_/ /g;
 			$meta =~ s/track /track_/g;
 			$meta =~ m|.*<common>\s*?\n(.*)</common>|s;
@@ -226,10 +221,13 @@ sub m_import {
 					# t_name - subtable name, t_num - subtable number, t_data -
 					# subtable data
 					my ($t_name, $t_num) = ($1, $2);
+
+					# Var $track_meta will change, so better to remove a
+					# subtable
 					$track_meta =~ s/^\s*\["$t_name"\]=\{$t_num\},\n//mg;
+
 					$meta =~ /^--\sTable:\s\{$t_num\}\n\{\n(.*?,)\n\},\n/ms;
 					my $t_data = $1;
-					
 					# Adding a subtable name to t_data
 					$t_data =~ s/(\s*\[")/$1$t_name\_/xg;
 					$track_meta = $track_meta . "\n" . $t_data;
