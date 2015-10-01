@@ -1,24 +1,17 @@
 #!/usr/bin/perl 
 #===============================================================================
 #
-#         FILE:  sform.pl
-#
 #        USAGE:  ./sform.pl  
-#
 #  DESCRIPTION:  simple script for music tagging, renaming and converting
 #
-#      OPTIONS:  ---
 # REQUIREMENTS:  perl 5.20
-#         BUGS:  none
 #        NOTES:  First of all you should prepared metadata. It gather from
 #        		 different sources and put to .metadata directory. Secondary,
 #        		 convert to vorbis audio and write tags. Next one: rename files
 #        		 to hardcoded template and create directory
 #       AUTHOR:  163140@autistici.org, 
 #      COMPANY:  anonimous
-#      VERSION:  0.0
 #      CREATED:  26.05.2015 15:15:23
-#     REVISION:  22
 #     RDEPENDS:  vorbiscomment, oggenc, shntool, File::Slurp, Getopt::Std,
 #     			 File::Spec, Ogg::Vorbis
 #===============================================================================
@@ -77,9 +70,7 @@ sub is_meta_present {
 
 # Action "get"
 # recognize encoding and convert to utf-8
-# extract from cue-file
-# extract from log-file
-# extract from html-file
+# extract from CUE, AccuRIP log, MetalMadness Team txt, rutracker.org html
 sub m_get { die "Not implemented" }
 
 
