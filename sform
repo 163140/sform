@@ -45,14 +45,17 @@ Usage:
 		rename - rename vorbis audio files according to "tracknum-title" pattern
 				 and create "date-album" directory
 
-		convert - split lossless file (if need) and convert to  vorbis audio.
+		convert - split lossless file (if need) and convert to vorbis audio.
 			Options:
 				-c - cue-file (mandatory)
 				-q - vorbis audio quality (default 7.5). See man oggenc for
 					 details.
 
-		import - convert metadata files from early versions to new. Currently 
-				 only plain text metadata supported, and simple Lua table
+		import - convert metadata files from early versions to new.
+
+		get -	gather metadata from various local sources (CUE file, ACCURIP
+				log, MetalMadNess txt file, rutracker.org html page).
+				
 __HELP__
 }
 
@@ -77,7 +80,7 @@ sub is_meta_present {
 # extract from cue-file
 # extract from log-file
 # extract from html-file
-sub m_get { die "Not implemented yet" }
+sub m_get { die "Not implemented" }
 
 
 # Action tag. Usage: &m_tag (@vorbis_files)
@@ -151,7 +154,7 @@ sub m_convert {
 }
 
 # Action import. Usage: &m_import (old_meta)
-sub m_import {		#tested
+sub m_import {
 	use File::Slurp;
 	mkdir META unless -d META;
 	my $oldfile = shift;
@@ -162,40 +165,44 @@ sub m_import {		#tested
 	# album.meta with <tag></tag> (key: <tech>)
 	# album.meta with ## delimiter (key: tech ##)
 	# meta.lua containing several lua-tables (key: tech={})
-	# meta.lua containing lua table of tables (key: return {\n-- Table)
+	# meta.lua containing lua table of tables (key: return \{\n-- Table)
 	
-	given ($meta) {
-		when (/\/tech/) {
+	given ($meta) { ### not tested
+		when (/<tech>/) {
 			$meta =~ s/^\s*//gm;
 			$meta =~ s/_/ /g;
 			$meta =~ s/track /track_/g;
 			$meta =~ m|.*<common>\s*?\n(.*)</common>|s;
 			my $common = $1;
-			while ($meta =~ m|<(track_\d+)>\s*?\n(.*)</\g1>|gs) {
+			while ($meta =~ m|^<(track_\d+)>\s*?\n(.*)</\g1>|mgs) {
 				$fname = File::Spec->catfile(META, $1);
 				write_file($fname, $2) if defined($2);
 				write_file($fname, {append => 1}, $common) if defined($common);
 			}
 		}
 		when (/tech ##/) {
-			$meta =~ s/^# vim.*//g;
-			$meta =~ s/^tech\s##//g;
-			$meta =~ /(common\s##\s.*common\s##\s.*\n)/s;
+			$meta =~ s/^# vim.*\n//mg;
+			$meta =~ s/^tech\s##.*\n//mg;
+			$meta =~ /^(common\s##\s.*^common\s##\s.*?\n)/ms;
 			my $common = $1;
-			$common =~ s/common\s##\s//g;
+			$common =~ s/^common\s##\s//mg;
 			$common =~ s/\s##\s/=/g;
-			while ($meta =~ /((\d*)\s##\s.*\g2\s##\s.*##.*\n)/sg) {
+			while ($meta =~ /^((\d*)\s##\s.*^\2\s##\s\w*\s##.*?\n)/msg) {
 				my $track_meta = $1;
 				my $fname = $2;
 				$fname = "0" . $fname if $fname < 10;
 				$fname = File::Spec->catfile(META, "track_" . $fname);
+
+				$track_meta =~ s/^\d*\s##\s//mg;
 				$track_meta =~ s/^\d*\s##\s//g;
 				$track_meta =~ s/\s##\s/=/g;
+
 				write_file($fname, $track_meta);
 				write_file($fname, {append => 1}, $common) if defined($common);
 			}
+		}
 		when (/tech=\{\}\n\s*common=\{\}/) {
-			# deleting lua-scpecific symbols and intends
+			# deleting lua-specific symbols and intends
 			$meta =~ s/",\n\s*/\n/g;
 			$meta =~ s/=\{\n\s*/=\{\n/g;
 			$meta =~ s/="/=/g;
@@ -209,13 +216,41 @@ sub m_import {		#tested
 				my $track_meta = $1;
 				$track_meta =~ /.*tracknumber=(\d*).*/s;
 				$fname = File::Spec->catfile(META, "track_" . $1);
+
 				write_file($fname, $track_meta);
 				write_file($fname, {append => 1}, $common) if defined($common);
 			}
 		}
 		when (/return\s\{.*\n--\sTable:/) {
-				# not implemented /0z/untagged/Abigail
-				# Williams/2006-Legend/meta.lua
+			while ($meta =~ /^--\sTable:\s\{\d*\}\n\{\n(.*?)\n\},\n/msg) {
+				my $track_meta = $1;
+				
+				# Check is it a primary lua-table that contain data about track 
+				next unless $track_meta =~ /tracknumber"\]="(\d*)",/;
+
+				$fname = File::Spec->catfile(META, "track_" . $1);
+
+				#checking for subtables, and make a string
+				while ($track_meta =~ /^\s*\["(.*?)"\]=\{(\d*?)\},$/mg) {
+					# t_name - subtable name, t_num - subtable number, t_data -
+					# subtable data
+					my ($t_name, $t_num) = ($1, $2);
+					$track_meta =~ s/^\s*\["$t_name"\]=\{$t_num\},\n//mg;
+					$meta =~ /^--\sTable:\s\{$t_num\}\n\{\n(.*?,)\n\},\n/ms;
+					my $t_data = $1;
+					
+					# Adding a subtable name to t_data
+					$t_data =~ s/(\s*\[")/$1$t_name\_/xg;
+					$track_meta = $track_meta . "\n" . $t_data;
+				}
+
+				# deleting lua-specific symbols and spaces
+				$track_meta =~ s/^\s*\["//mg;
+				$track_meta =~ s/"\]="/=/g;
+				$track_meta =~ s/",$//mg;
+				write_file($fname, $track_meta);
+			}
+
 		}
 	}
 }
