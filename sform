@@ -185,6 +185,7 @@ sub m_import {
 		when (/tech ##/) {
 			$meta =~ s/^# vim.*\n//mg;
 			$meta =~ s/^tech\s##.*\n//mg;
+			$meta =~ s/_/ /g;
 			$meta =~ /^(common\s##\s.*^common\s##\s.*?\n)/ms;
 			my $common = $1;
 			$common =~ s/^common\s##\s//mg;
