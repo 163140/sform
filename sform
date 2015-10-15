@@ -101,7 +101,7 @@ sub m_tag {
 	@vorbis_meta{ @_ } = @files;
 	for my $vorbis (keys %vorbis_meta) {
 		my $comment = File::Spec->catfile(META, $vorbis_meta{$vorbis});
-		system ("vorbiscomment", "-w",  "-c", "$comment", "$vorbis")
+		system ("vorbiscomment", "-w",  "-c", "$comment", "\"$vorbis\"")
 			or die "Failed tagging $vorbis: $?";
 	}
 }
@@ -144,13 +144,13 @@ sub m_convert {
 		last if $file;
 	}
 	# 0 mean normal exit
-	my $res = system("shntool split $file -f $cue -t track_%n -P none -O always");
+	my $res = system("shntool split \"$file\" -f \"$cue\" -t track_%n -P none -O always");
 	warn "Error while split. Try to get wav-files\n" if $res;
 	my @files = glob "track_*.wav";
 	
 	# TODO make it parallel;
 	for (@files) {
-		system("oggenc -q $q $_");
+		system("oggenc -q $q \"$_\"");
 	}
 	
 }
