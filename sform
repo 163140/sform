@@ -101,8 +101,7 @@ sub m_tag {
 	@vorbis_meta{ @_ } = @files;
 	for my $vorbis (keys %vorbis_meta) {
 		my $comment = File::Spec->catfile(META, $vorbis_meta{$vorbis});
-		system ("vorbiscomment", "-w",  "-c", "$comment", "\"$vorbis\"")
-			or die "Failed tagging $vorbis: $?";
+		system ("vorbiscomment", "-w",  "-c", $comment, $vorbis)
 	}
 }
 
@@ -116,11 +115,18 @@ sub m_rename {
 		my %meta = %{$ogg->comment};
 
 		# making a new file and dir names
+		my $add_dir_name = $meta{edition} || $meta{EDITION} || 
+						   $meta{ADD_INFO} || $meta{add_info} || 
+						   $meta{"ADD INFO"} || $meta{"add info"} ||
+						   $meta{addinfo} || $meta{ADDINFO}; 
+
+		my $add_dir_name = " (". $add_dir_name . ")" if $add_dir_name;
+
 		my $name =	($meta{tracknumber} || $meta{TRACKNUMBER})."-".
 					($meta{title} || $meta{TITLE}).".ogg";
 
 		my $dir =	($meta{date} || $meta{DATE})."-".
-					($meta{album} || $meta{ALBUM});
+					($meta{album} || $meta{ALBUM}) . $add_dir_name;
 		die "Metadata problem" if ($dir == "-"	or $name == "-");
 
 		# creating directory "album_year-album_name"
@@ -144,13 +150,13 @@ sub m_convert {
 		last if $file;
 	}
 	# 0 mean normal exit
-	my $res = system("shntool split \"$file\" -f \"$cue\" -t track_%n -P none -O always");
+	my $res = system("shntool split $file -f $cue -t track_%n -P none -O always");
 	warn "Error while split. Try to get wav-files\n" if $res;
 	my @files = glob "track_*.wav";
 	
 	# TODO make it parallel;
 	for (@files) {
-		system("oggenc -q $q \"$_\"");
+		system("oggenc -q $q $_");
 	}
 	
 }
