@@ -29,3 +29,22 @@
 
 
 use v5.36
+
+get_eac_version($File) { ;; }
+
+parse_1_5($File) { ;; }
+
+ripping_date($File) { ;; } # YYYY.MM.DD
+
+accurate_mode($File) { ;; } # Read mode == Secure && accurate stream && no audio cache && no C2 pointers
+
+read_offset($File) { ;; }
+
+track_len($File, $Track_num) { ;; }
+track_start_end($File, $Track_num) { ;; ($start, $end);}
+disk_CRC($File) {;; (CRC, $Value)}
+track_CRC($File) {;; (CRC, $Value)}
+accurately_ripped($File, $Track_num) {;;} # true/false
+log_checksum($File) {;;}
+
+#TODO: out data format
