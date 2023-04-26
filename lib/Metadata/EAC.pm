@@ -20,6 +20,8 @@ use feature "switch";
 #use subs qw();
 
 my $Filename = "/home/ea1a87/Soft/My/sm2f/eac_testdata/1.0.b3-29.08.11.log";
+
+# TODO: надо проверить имеет ли смысл парсить по строки, в плане производительности
 my $File = read_text($Filename);
 my @File = read_lines($Filename);
 
@@ -43,7 +45,21 @@ return $Ver; }
 parse_1_5($File) { ... }
 parse_1_0 { ... }
 
-ripping_date($File) { ... } # YYYY.MM.DD
+# TODO: TEST IT!!!
+# UNTESTED
+ripping_date($File, @File) {  # return "день месяц год"
+	# Обычно дата рипа на третьей строке
+	$File[2] =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
+	my @Date = ($1, $2, $3);
+	# но мало ли что
+	if (not $1) {
+		$File =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
+		@Date = ($1, $2, $3);
+	}
+	return $Date[0] . " " . $Date[1] . " " . $Date[2];
+	# TODO: а если не изъялось ничего или не полностью?
+	# TODO: а если месяц указан на французском и год стоит впереди?
+}	
 
 accurate_mode($File) { ... } # Read mode == Secure && accurate stream && no audio cache && no C2 pointers
 
