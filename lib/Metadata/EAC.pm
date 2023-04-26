@@ -33,7 +33,7 @@ get_version($File, @File) { # return $Ver
 	my $Ver =~ $1;
 	if (not $1) {
 		# нету версии на первой строке, пробуем пробежать весь файл
-		$File[0] =~ /Audio Copy (V\d.\d.*) from/
+		$File =~ /Audio Copy (V\d.\d.*) from/
 	}
 	#нормализуем
 	given ($Ver) {
