@@ -23,8 +23,6 @@ no warnings qw( experimental::smartmatch );
 # my $File = read_text($Filename);
 # my @File = read_lines($Filename);
 
-# TODO: TEST IT!!!
-# UNTESTED
 sub get_version($File, @File) {# return $Ver
 	# Версия на первой строке
 	$File[0] =~ /Audio Copy V(\d.\d.*) from/;
@@ -44,8 +42,6 @@ return $Ver; }
 sub parse_1_5($File) { ... }
 sub parse_1_0 { ... }
 
-# TODO: TEST IT!!!
-# UNTESTED
 sub ripping_date($File, @File) {  # return "день месяц год"
 	# Обычно дата рипа на третьей строке
 	$File[2] =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
