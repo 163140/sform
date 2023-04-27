@@ -1,6 +1,6 @@
 package Metadata::EAC;
 
-use 5.36;
+use v5.36;
 use strict;
 use warnings;
 use Exporter qw(import);
@@ -17,6 +17,7 @@ sub parse($Filename) {
 # use File::Slurper qw(read_text read_lines);
 use Memoize;
 use feature "switch";
+no warnings qw( experimental::smartmatch );
 
 # TODO: надо проверить имеет ли смысл парсить по строки, в плане производительности
 # my $File = read_text($Filename);
@@ -24,13 +25,13 @@ use feature "switch";
 
 # TODO: TEST IT!!!
 # UNTESTED
-get_version($File, @File) { # return $Ver
+sub get_version($File, @File) {# return $Ver
 	# Версия на первой строке
-	$File[0] =~ /Audio Copy (V\d.\d.*) from/
+	$File[0] =~ /Audio Copy (V\d.\d.*) from/;
 	my $Ver =~ $1;
 	if (not $1) {
 		# нету версии на первой строке, пробуем пробежать весь файл
-		$File =~ /Audio Copy (V\d.\d.*) from/
+		$File =~ /Audio Copy (V\d.\d.*) from/;
 	}
 	#нормализуем
 	given ($Ver) {
@@ -39,12 +40,12 @@ get_version($File, @File) { # return $Ver
 	}
 return $Ver; }
 
-parse_1_5($File) { ... }
-parse_1_0 { ... }
+sub parse_1_5($File) { ... }
+sub parse_1_0 { ... }
 
 # TODO: TEST IT!!!
 # UNTESTED
-ripping_date($File, @File) {  # return "день месяц год"
+sub ripping_date($File, @File) {  # return "день месяц год"
 	# Обычно дата рипа на третьей строке
 	$File[2] =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
 	my @Date = ($1, $2, $3);
@@ -58,16 +59,16 @@ ripping_date($File, @File) {  # return "день месяц год"
 	# TODO: а если месяц указан на французском и год стоит впереди?
 }	
 
-accurate_mode($File) { ... } # Read mode == Secure && accurate stream && no audio cache && no C2 pointers
+sub accurate_mode($File) { ... } # Read mode == Secure && accurate stream && no audio cache && no C2 pointers
 
-read_offset($File) { ... }
+sub read_offset($File) { ... }
 
-track_len($File, $Track_num) { ... }
-track_start_end($File, $Track_num) { ... ($start, $end);}
-disk_CRC($File) {... (CRC, $Value)}
-track_CRC($File) {... (CRC, $Value)}
-accurately_ripped($File, $Track_num) { ... } # true/false
-log_checksum($File) { ... }
+sub track_len($File, $Track_num) { ... }
+sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
+sub disk_CRC($File) { ... } # (CRC, $Value)
+sub track_CRC($File) {... } # (CRC, $Value)
+sub accurately_ripped($File, $Track_num) { ... } # true/false
+sub log_checksum($File) { ... }
 
 #TODO: out data format
 
