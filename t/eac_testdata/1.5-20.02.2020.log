@@ -1,0 +1,90 @@
+Exact Audio Copy V1.5 from 20. February 2020
+
+EAC extraction logfile from 27. July 2020, 15:48
+
+Summoning / Oath Bound
+
+Used drive  : MATSHITADVD-RAM UJ-841S   Adapter: 1  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 102
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 128 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files (x86)\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "Date=%year%" -T "Genre=%genre%" %source%
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  2:58.42 |         0    |    13391   
+        2  |  2:58.42 | 10:20.06 |     13392    |    59897   
+        3  | 13:18.48 |  8:13.49 |     59898    |    96921   
+        4  | 21:32.22 |  8:26.24 |     96922    |   134895   
+        5  | 29:58.46 |  9:27.71 |    134896    |   177491   
+        6  | 39:26.42 |  8:39.39 |    177492    |   216455   
+        7  | 48:06.06 |  8:12.19 |    216456    |   253374   
+        8  | 56:18.25 | 12:50.31 |    253375    |   311155   
+
+
+Range status and errors
+
+Selected range
+
+     Filename C:\Zloslaw\Summoning - 2006 - Oath Bound (MR 2238-2)\Summoning - Oath Bound.wav
+
+     Peak level 100.0 %
+     Extraction speed 4.3 X
+     Range quality 100.0 %
+     Test CRC 987253F7
+     Copy CRC 987253F7
+     Copy OK
+
+No errors occurred
+
+ 
+AccurateRip summary
+ 
+Track  1  cannot be verified as accurate (confidence 25)  [3F5B68D8], AccurateRip returned [57DAED5A]  (AR v2)
+Track  2  cannot be verified as accurate (confidence 25)  [8E0140B6], AccurateRip returned [DFB51237]  (AR v2)
+Track  3  cannot be verified as accurate (confidence 25)  [ACABC163], AccurateRip returned [DC8A792A]  (AR v2)
+Track  4  cannot be verified as accurate (confidence 25)  [5A7E2979], AccurateRip returned [ED7A47F8]  (AR v2)
+Track  5  cannot be verified as accurate (confidence 25)  [7C0A4EAC], AccurateRip returned [222A81AD]  (AR v2)
+Track  6  cannot be verified as accurate (confidence 25)  [8EC6A3D9], AccurateRip returned [77DC1B47]  (AR v2)
+Track  7  cannot be verified as accurate (confidence 25)  [0A5B0CC9], AccurateRip returned [9D54C93D]  (AR v2)
+Track  8  cannot be verified as accurate (confidence 25)  [82D339B5], AccurateRip returned [977791F3]  (AR v2)
+ 
+No tracks could be verified as accurate
+You may have a different pressing from the one(s) in the database
+
+End of status report
+
+---- CUETools DB Plugin V2.1.6
+
+[CTDB TOCID: YaklG345grxqFdCNCo7GRz0t4Qg-] found
+Submit result: YaklG345grxqFdCNCo7GRz0t4Qg- has been confirmed
+Track | CTDB Status
+  1   | (153/153) Accurately ripped
+  2   | (151/153) Accurately ripped
+  3   | (153/153) Accurately ripped
+  4   | (153/153) Accurately ripped
+  5   | (153/153) Accurately ripped
+  6   | (153/153) Accurately ripped
+  7   | (153/153) Accurately ripped
+  8   | (153/153) Accurately ripped
+
+
+==== Log checksum 82160162E96B99E448CCDECF0CF154E6D89A18911B7D87C085A77245EC02E043 ====
