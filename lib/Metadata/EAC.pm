@@ -19,38 +19,27 @@ use Memoize;
 use feature "switch";
 no warnings qw( experimental::smartmatch );
 
-# TODO: надо проверить имеет ли смысл парсить по строки, в плане производительности
 # my $File = read_text($Filename);
 # my @File = read_lines($Filename);
 
-sub get_version($File, @File) {# return $Ver
-	# Версия на первой строке
-	$File[0] =~ /Audio Copy V(\d.\d.*) from/;
+sub get_version($File) {# return $Ver
+	$File =~ /Audio Copy V(\d.\d.*) from/;
 	my $Ver = $1;
-	if (not $1) {
-		# нету версии на первой строке, пробуем пробежать весь файл
-		$File =~ /Audio Copy V(\d.\d.*) from/;
-	}
 	#нормализуем
 	given ($Ver) {
 		$Ver = 1		when	/1\.0./;
 		$Ver = 1.5	when	/1\.5/;
 		default { $Ver = undef }
 	}
-return $Ver; }
+	return $Ver;
+}
 
 sub parse_1_5($File) { ... }
 sub parse_1_0 { ... }
 
-sub ripping_date($File, @File) {  # return "день месяц год"
-	# Обычно дата рипа на третьей строке
-	$File[2] =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
+sub ripping_date($File) {  # return "день месяц год"
+	$File =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
 	my @Date = ($1, $2, $3);
-	# но мало ли что
-	if (not $1) {
-		$File =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
-		@Date = ($1, $2, $3);
-	}
 	return $Date[0] . " " . $Date[1] . " " . $Date[2];
 	# TODO: а если не изъялось ничего или не полностью?
 	# TODO: а если месяц указан на французском и год стоит впереди?
