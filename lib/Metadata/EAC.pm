@@ -6,24 +6,21 @@ use warnings;
 use Exporter qw(import);
 
 our @ISA = qw(Exporter);
-our @EXPORT = qw(parse);
-our @EXPORT_OK = qw(parse);
-our %EXPORT_TAGS = (TEST => [qw(parse)]);
+our @EXPORT = qw();
+our @EXPORT_OK = qw(parse get_version ripping_date);
+our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date)]);
 
 sub parse($Filename) {
 	...
 }
 
-use File::Slurper qw(read_text read_lines);
+# use File::Slurper qw(read_text read_lines);
 use Memoize;
 use feature "switch";
-#use subs qw();
-
-my $Filename = "/home/ea1a87/Soft/My/sm2f/eac_testdata/1.0.b3-29.08.11.log";
 
 # TODO: надо проверить имеет ли смысл парсить по строки, в плане производительности
-my $File = read_text($Filename);
-my @File = read_lines($Filename);
+# my $File = read_text($Filename);
+# my @File = read_lines($Filename);
 
 # TODO: TEST IT!!!
 # UNTESTED
