@@ -27,16 +27,17 @@ no warnings qw( experimental::smartmatch );
 # UNTESTED
 sub get_version($File, @File) {# return $Ver
 	# Версия на первой строке
-	$File[0] =~ /Audio Copy (V\d.\d.*) from/;
-	my $Ver =~ $1;
+	$File[0] =~ /Audio Copy V(\d.\d.*) from/;
+	my $Ver = $1;
 	if (not $1) {
 		# нету версии на первой строке, пробуем пробежать весь файл
-		$File =~ /Audio Copy (V\d.\d.*) from/;
+		$File =~ /Audio Copy V(\d.\d.*) from/;
 	}
 	#нормализуем
 	given ($Ver) {
-		$Ver = 1 when /1\.0./;
-		default { $Ver = 0 }
+		$Ver = 1		when	/1\.0./;
+		$Ver = 1.5	when	/1\.5/;
+		default { $Ver = undef }
 	}
 return $Ver; }
 
