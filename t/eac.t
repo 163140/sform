@@ -24,7 +24,7 @@ use File::Spec;
 use FindBin qw($Bin);
 use lib File::Spec->catdir(File::Spec->updir($Bin), 'lib');
 
-use Metadata::EAC qw(get_version ripping_date accurate_mode);
+use Metadata::EAC qw(get_version ripping_date accurate_mode disk_CRC);
 use v5.36;
 
 use File::Slurper qw(read_text read_lines);
@@ -43,8 +43,10 @@ say "\nВерсия логов EAC 1.0 beta 3 перекодированная �
 is ( get_version(read_text($LOG_1_0_b3)), '1', "Получение версии // get_version" );
 is ( ripping_date(read_text($LOG_1_0_b3)), '27 February 2014', "Получение версии // ripping_date" );
 is ( accurate_mode(read_text($LOG_1_0_b3)), true, "Точное чтение? // accurate_mode" );
+is ( disk_CRC(read_text($LOG_1_0_b3)), "1E1DD436", "Чексумма диска // disk_CRC");
 
 say "\nВерсия логов EAC 1.5 перекодированная из UCS-2 в UTF-8 в Windows 10 блокнотом";
 is ( get_version(read_text($LOG_1_5)), '1.5', "Получение версии // get_version" );
 is ( ripping_date(read_text($LOG_1_5)), '27 July 2020', "Получение версии // ripping_date" );
 is ( accurate_mode(read_text($LOG_1_5)), true, "Точное чтение? // accurate_mode" );
+is ( disk_CRC(read_text($LOG_1_5)), "987253F7", "Чексумма диска // disk_CRC");
