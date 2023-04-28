@@ -7,8 +7,8 @@ use Exporter qw(import);
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw();
-our @EXPORT_OK = qw(parse get_version ripping_date);
-our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date)]);
+our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode);
+our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode)]);
 
 sub parse($Filename) {
 	...
@@ -45,7 +45,12 @@ sub ripping_date($File) {  # return "день месяц год"
 	# TODO: а если месяц указан на французском и год стоит впереди?
 }	
 
-sub accurate_mode($File) { ... } # Read mode == Secure && accurate stream && no audio cache && no C2 pointers
+sub accurate_mode($File) { # true/false
+	$File =~ /Read mode\s*:\sSecure/ &&
+	$File =~ /Utilize accurate stream\s:\sYes/ &&
+	$File =~ /Defeat audio cache\s*:\sYes/ &&
+	$File =~ /Make use of C2 pointers\s*:\sNo/
+}
 
 sub read_offset($File) { ... }
 
