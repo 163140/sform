@@ -4,23 +4,22 @@ use v5.36;
 use strict;
 use warnings;
 use Exporter qw(import);
+use Memoize;
+use feature "switch";
+no warnings qw( experimental::smartmatch );
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw();
 our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC);
 our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC)]);
 
-sub parse($Filename) {
-	...
+
+sub parse($Filename) { ... }
 }
 
-# use File::Slurper qw(read_text read_lines);
-use Memoize;
-use feature "switch";
-no warnings qw( experimental::smartmatch );
+sub parse_1_5($File) { ... }
+sub parse_1_0($File) { ... }
 
-# my $File = read_text($Filename);
-# my @File = read_lines($Filename);
 
 sub get_version($File) {# return $Ver
 	$File =~ /Audio Copy V(\d.\d.*) from/;
@@ -34,8 +33,6 @@ sub get_version($File) {# return $Ver
 	return $Ver;
 }
 
-sub parse_1_5($File) { ... }
-sub parse_1_0 { ... }
 
 sub ripping_date($File) {  # return "день месяц год"
 	$File =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
@@ -52,14 +49,13 @@ sub accurate_mode($File) { # true/false
 	$File =~ /Make use of C2 pointers\s*:\sNo/
 }
 
-sub track_len($File, $Track_num) { ... }
-sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
-
 sub disk_CRC($File) { 
 	$File =~ /Copy CRC (\w{8})/a;
 	return $1;
 }
 
+sub track_len($File, $Track_num) { ... }
+sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
 sub track_CRC($File) {... } # (CRC, $Value)
 sub accurately_ripped($File, $Track_num) { ... } # true/false
 sub log_checksum($File) { ... }
