@@ -52,8 +52,6 @@ sub accurate_mode($File) { # true/false
 	$File =~ /Make use of C2 pointers\s*:\sNo/
 }
 
-sub read_offset($File) { ... }
-
 sub track_len($File, $Track_num) { ... }
 sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
 sub disk_CRC($File) { ... } # (CRC, $Value)
