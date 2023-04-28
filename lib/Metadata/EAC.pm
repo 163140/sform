@@ -7,8 +7,8 @@ use Exporter qw(import);
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw();
-our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode);
-our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode)]);
+our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC);
+our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC)]);
 
 sub parse($Filename) {
 	...
