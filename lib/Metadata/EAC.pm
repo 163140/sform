@@ -54,7 +54,12 @@ sub accurate_mode($File) { # true/false
 
 sub track_len($File, $Track_num) { ... }
 sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
-sub disk_CRC($File) { ... } # (CRC, $Value)
+
+sub disk_CRC($File) { 
+	$File =~ /Copy CRC (\w{8})/a;
+	return $1;
+}
+
 sub track_CRC($File) {... } # (CRC, $Value)
 sub accurately_ripped($File, $Track_num) { ... } # true/false
 sub log_checksum($File) { ... }
