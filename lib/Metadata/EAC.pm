@@ -15,17 +15,13 @@ our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode dis
 
 
 sub parse($Filename) { ... }
-}
-
 sub parse_1_5($File) { ... }
 sub parse_1_0($File) { ... }
 
 
 sub get_version($File) {# return $Ver
-	$File =~ /Audio Copy V(\d.\d.*) from/;
-	my $Ver = $1;
-	#нормализуем
-	given ($Ver) {
+	my ($Ver) = $File =~ /Audio Copy V(\d.\d.*) from/;
+	given ($Ver) { #нормализуем
 		$Ver = 1		when	/1\.0./;
 		$Ver = 1.5	when	/1\.5/;
 		default { $Ver = undef }
@@ -35,24 +31,20 @@ sub get_version($File) {# return $Ver
 
 
 sub ripping_date($File) {  # return "день месяц год"
-	$File =~ /logfile from (\d?\d)\. (.+?) (\d\d\d\d), \d\d:\d\d/;
-	my @Date = ($1, $2, $3);
-	return $Date[0] . " " . $Date[1] . " " . $Date[2];
+	return join " ", $File =~ /file from (\d?\d)\. (.+?) (\d{4}), \d\d:\d\d/;
 	# TODO: а если не изъялось ничего или не полностью?
 	# TODO: а если месяц указан на французском и год стоит впереди?
 }	
 
 sub accurate_mode($File) { # true/false
+	return (
 	$File =~ /Read mode\s*:\sSecure/ &&
 	$File =~ /Utilize accurate stream\s:\sYes/ &&
 	$File =~ /Defeat audio cache\s*:\sYes/ &&
-	$File =~ /Make use of C2 pointers\s*:\sNo/
+	$File =~ /Make use of C2 pointers\s*:\sNo/);
 }
 
-sub disk_CRC($File) { 
-	$File =~ /Copy CRC (\w{8})/a;
-	return $1;
-}
+sub disk_CRC($File) { $File =~ /Copy CRC (\w{8})/a; return $1 }
 
 sub track_len($File, $Track_num) { ... }
 sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
