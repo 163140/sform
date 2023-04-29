@@ -10,8 +10,8 @@ no warnings qw( experimental::smartmatch );
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw();
-our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC);
-our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC)]);
+our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum);
+our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum)]);
 
 
 sub parse($Filename) { ... }
@@ -50,7 +50,9 @@ sub track_len($File, $Track_num) { ... }
 sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
 sub track_CRC($File) {... } # (CRC, $Value)
 sub accurately_ripped($File, $Track_num) { ... } # true/false
-sub log_checksum($File) { ... }
+sub log_checksum($File) {
+	#return $File =~ /.*Log checksum (\w*) ====/a);
+}
 
 #TODO: out data format
 
