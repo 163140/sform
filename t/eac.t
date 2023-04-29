@@ -9,7 +9,7 @@
 #         BUGS: ---
 #        NOTES: ---
 #       AUTHOR: EA1A87 (), 163140@autistici.org
-# ORGANIZATION: 
+# ORGANIZATION:
 #      VERSION: 1.0
 #      CREATED: 25.04.2023 23:06:50
 #     REVISION: ---
