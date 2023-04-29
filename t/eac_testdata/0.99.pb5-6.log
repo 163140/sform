@@ -1,0 +1,215 @@
+Exact Audio Copy V0.99 prebeta 5 from 4. May 2009
+
+EAC extraction logfile from 11. September 2010, 0:36
+
+Apocalyptica / Cult
+
+Used drive  : _NEC    DVD_RW ND-4570A   Adapter: 0  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 48
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+Gap handling                                : Appended to previous track
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 320 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "artist=%a" -T "title=%t" -T "album=%g" -T "date=%y" -T "tracknumber=%n" -T "genre=%m" %s
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  3:06.14 |         0    |    13963   
+        2  |  3:06.14 |  3:26.51 |     13964    |    29464   
+        3  |  6:32.65 |  3:27.17 |     29465    |    45006   
+        4  | 10:00.07 |  4:24.65 |     45007    |    64871   
+        5  | 14:24.72 |  4:42.34 |     64872    |    86055   
+        6  | 19:07.31 |  4:25.27 |     86056    |   105957   
+        7  | 23:32.58 |  3:57.53 |    105958    |   123785   
+        8  | 27:30.36 |  3:25.37 |    123786    |   139197   
+        9  | 30:55.73 |  4:45.28 |    139198    |   160600   
+       10  | 35:41.26 |  6:57.61 |    160601    |   191936   
+       11  | 42:39.12 |  3:29.26 |    191937    |   207637   
+       12  | 46:08.38 |  3:14.19 |    207638    |   222206   
+       13  | 49:22.57 |  3:25.22 |    222207    |   237603   
+
+
+Track  1
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\01 - Path.wav
+
+     Pre-gap length  0:00:02.00
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 0D7A7CC7
+     Copy CRC 0D7A7CC7
+     Accurately ripped (confidence 15)  [D40DD83A]
+     Copy OK
+
+Track  2
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\02 - Struggle.wav
+
+     Peak level 98.8 %
+     Track quality 99.9 %
+     Test CRC 3DC2AEF6
+     Copy CRC 3DC2AEF6
+     Accurately ripped (confidence 15)  [A834D941]
+     Copy OK
+
+Track  3
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\03 - Romance.wav
+
+     Pre-gap length  0:00:00.76
+
+     Peak level 98.8 %
+     Track quality 99.9 %
+     Test CRC 663E825E
+     Copy CRC 663E825E
+     Accurately ripped (confidence 15)  [DDB1A829]
+     Copy OK
+
+Track  4
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\04 - Pray!.wav
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC B52367D3
+     Copy CRC B52367D3
+     Accurately ripped (confidence 15)  [BE6A3088]
+     Copy OK
+
+Track  5
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\05 - In Memoriam.wav
+
+     Pre-gap length  0:00:02.33
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 5503B6CD
+     Copy CRC 5503B6CD
+     Accurately ripped (confidence 15)  [D7A76E7D]
+     Copy OK
+
+Track  6
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\06 - Hyperventilation.wav
+
+     Pre-gap length  0:00:03.01
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC C0310A21
+     Copy CRC C0310A21
+     Accurately ripped (confidence 15)  [77387AAA]
+     Copy OK
+
+Track  7
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\07 - Beyond Time.wav
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 7CE7532B
+     Copy CRC 7CE7532B
+     Accurately ripped (confidence 15)  [9B2D0F43]
+     Copy OK
+
+Track  8
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\08 - Hope.wav
+
+     Pre-gap length  0:00:00.05
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 2E4FC8BF
+     Copy CRC 2E4FC8BF
+     Accurately ripped (confidence 15)  [0C45488B]
+     Copy OK
+
+Track  9
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\09 - Kaamos.wav
+
+     Pre-gap length  0:00:00.82
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC CF462623
+     Copy CRC CF462623
+     Accurately ripped (confidence 15)  [2FA6AB7C]
+     Copy OK
+
+Track 10
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\10 - Coma.wav
+
+     Pre-gap length  0:00:03.73
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 7CEF15EE
+     Copy CRC 7CEF15EE
+     Accurately ripped (confidence 15)  [BA53729C]
+     Copy OK
+
+Track 11
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\11 - Hall of the Mountain King.wav
+
+     Pre-gap length  0:00:11.73
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC EFB1C307
+     Copy CRC EFB1C307
+     Accurately ripped (confidence 15)  [1819A9B1]
+     Copy OK
+
+Track 12
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\12 - Until It Sleeps.wav
+
+     Pre-gap length  0:00:01.53
+
+     Peak level 98.8 %
+     Track quality 99.9 %
+     Test CRC C9E6C4B2
+     Copy CRC C9E6C4B2
+     Accurately ripped (confidence 15)  [9E8E5DF0]
+     Copy OK
+
+Track 13
+
+     Filename D:\Temp\Apocalyptica - 2000 - Cult [FLAC]\13 - Fight Fire With Fire.wav
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC D97C912D
+     Copy CRC D97C912D
+     Accurately ripped (confidence 15)  [B693F40D]
+     Copy OK
+
+
+All tracks accurately ripped
+
+No errors occurred
+
+End of status report

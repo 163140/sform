@@ -1,0 +1,68 @@
+Exact Audio Copy V1.0 beta 1 from 15. November 2010
+
+EAC extraction logfile from 22. March 2011, 15:45
+
+Woods Of Desolation / Toward The Depths
+
+Used drive  : Optiarc DVD RW AD-5240S   Adapter: 1  ID: 1
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 48
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+
+Used output format : Internal WAV Routines
+Sample format      : 44.100 Hz; 16 Bit; Stereo
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  7:12.04 |         0    |    32403   
+        2  |  7:12.04 |  5:53.49 |     32404    |    58927   
+        3  | 13:05.53 | 10:07.55 |     58928    |   104507   
+        4  | 23:13.33 |  1:52.56 |    104508    |   112963   
+        5  | 25:06.14 |  4:45.17 |    112964    |   134355   
+        6  | 29:51.31 | 10:23.10 |    134356    |   181090   
+        7  | 40:14.41 |  6:27.65 |    181091    |   210180   
+
+
+Range status and errors
+
+Selected range
+
+     Filename C:\Documents and Settings\user\Мои документы\Моя музыка\Woods Of Desolation - Toward The Depths.wav
+
+     Peak level 99.9 %
+     Extraction speed 0.5 X
+     Range quality 100.0 %
+     Test CRC 79E83F5D
+     Copy CRC 79E83F5D
+     Copy OK
+
+No errors occurred
+
+ 
+AccurateRip summary
+ 
+Track  1  accurately ripped (confidence 3)  [0E60DC55]
+Track  2  accurately ripped (confidence 3)  [65C24BDE]
+Track  3  accurately ripped (confidence 3)  [44A09C29]
+Track  4  accurately ripped (confidence 3)  [4EADDF17]
+Track  5  accurately ripped (confidence 3)  [8E87996F]
+Track  6  accurately ripped (confidence 3)  [327DBEFF]
+Track  7  accurately ripped (confidence 3)  [B3DB900D]
+ 
+All tracks accurately ripped
+
+End of status report
+
+==== Log checksum CDCA0C1251ED70503F1E0124642B6F868B8659B82A55AE5E5BDF52BF00302048 ====

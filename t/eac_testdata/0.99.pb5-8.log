@@ -1,0 +1,179 @@
+Exact Audio Copy V0.99 prebeta 5 from 4. May 2009
+
+EAC extraction logfile from 29. September 2009, 11:01
+
+Ajattara / Tyhjyys
+
+Used drive  : HL-DT-STDVDRAM GH22NS50   Adapter: 2  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 667
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Installed external ASPI interface
+Gap handling                                : Appended to previous track
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 128 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "artist=%a" -T "title=%t" -T "album=%g" -T "date=%y" -T "tracknumber=%n" -T "genre=%m" %s  
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  0:48.59 |         0    |     3658   
+        2  |  0:48.59 |  3:40.04 |      3659    |    20162   
+        3  |  4:28.63 |  3:34.60 |     20163    |    36272   
+        4  |  8:03.48 |  3:42.54 |     36273    |    52976   
+        5  | 11:46.27 |  3:23.53 |     52977    |    68254   
+        6  | 15:10.05 |  3:26.61 |     68255    |    83765   
+        7  | 18:36.66 |  3:24.07 |     83766    |    99072   
+        8  | 22:00.73 |  3:00.65 |     99073    |   112637   
+        9  | 25:01.63 |  3:59.02 |    112638    |   130564   
+       10  | 29:00.65 |  3:41.53 |    130565    |   147192   
+       11  | 32:42.43 |  3:23.57 |    147193    |   162474   
+
+
+Track  1
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\01 - Intro.wav
+
+     Pre-gap length  0:00:02.00
+
+     Peak level 74.9 %
+     Track quality 100.0 %
+     Test CRC 44323CF2
+     Copy CRC 44323CF2
+     Accurately ripped (confidence 7)  [A8C90771]
+     Copy OK
+
+Track  2
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\02 - Sortajan kaipuu.wav
+
+     Peak level 97.7 %
+     Track quality 100.0 %
+     Test CRC BE053AAC
+     Copy CRC BE053AAC
+     Accurately ripped (confidence 8)  [6450F870]
+     Copy OK
+
+Track  3
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\03 - Katumuksen kyinen koura.wav
+
+     Peak level 97.7 %
+     Track quality 100.0 %
+     Test CRC 5FB43BB4
+     Copy CRC 5FB43BB4
+     Accurately ripped (confidence 7)  [039A3A64]
+     Copy OK
+
+Track  4
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\04 - Naaras.wav
+
+     Peak level 97.7 %
+     Track quality 100.0 %
+     Test CRC 8B63F487
+     Copy CRC 8B63F487
+     Accurately ripped (confidence 8)  [00756C85]
+     Copy OK
+
+Track  5
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\05 - Armon arvet.wav
+
+     Peak level 97.7 %
+     Track quality 100.0 %
+     Test CRC E75DC135
+     Copy CRC E75DC135
+     Accurately ripped (confidence 7)  [8A879230]
+     Copy OK
+
+Track  6
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\06 - Pahan tuoma.wav
+
+     Pre-gap length  0:00:01.08
+
+     Peak level 94.6 %
+     Track quality 100.0 %
+     Test CRC 132785F4
+     Copy CRC 132785F4
+     Accurately ripped (confidence 7)  [72D00ADC]
+     Copy OK
+
+Track  7
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\07 - Harhojen renki.wav
+
+     Peak level 94.6 %
+     Track quality 100.0 %
+     Test CRC E0CE84B8
+     Copy CRC E0CE84B8
+     Accurately ripped (confidence 7)  [4458B963]
+     Copy OK
+
+Track  8
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\08 - Langennut.wav
+
+     Peak level 97.7 %
+     Track quality 100.0 %
+     Test CRC 63112621
+     Copy CRC 63112621
+     Accurately ripped (confidence 7)  [78B15761]
+     Copy OK
+
+Track  9
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\09 - Uhrit.wav
+
+     Pre-gap length  0:00:02.42
+
+     Peak level 97.7 %
+     Track quality 100.0 %
+     Test CRC AAE0DF6E
+     Copy CRC AAE0DF6E
+     Accurately ripped (confidence 7)  [2BE715A7]
+     Copy OK
+
+Track 10
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\10 - Tyhjyydestä.wav
+
+     Peak level 96.2 %
+     Track quality 100.0 %
+     Test CRC 61DBCFD4
+     Copy CRC 61DBCFD4
+     Accurately ripped (confidence 7)  [3A64294E]
+     Copy OK
+
+Track 11
+
+     Filename D:\FLAC\Ajattara - 2004 - Tyhjyys\11 - Outro.wav
+
+     Peak level 75.2 %
+     Track quality 100.0 %
+     Test CRC DE412D8F
+     Copy CRC DE412D8F
+     Accurately ripped (confidence 7)  [4B2736CF]
+     Copy OK
+
+
+All tracks accurately ripped
+
+No errors occurred
+
+End of status report

@@ -1,0 +1,72 @@
+Exact Audio Copy V0.99 prebeta 5 from 4. May 2009
+
+EAC extraction logfile from 25. October 2011, 12:38
+
+Belphegor / Blood Magick Necromance (LE, Nuclear Blast  NB 2653-2/27361 26532)
+
+Used drive  : PLEXTOR DVDR   PX-760A   Adapter: 0  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 30
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 1024 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files (x86)\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -8 -V %s
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  5:31.08 |         0    |    24832   
+        2  |  5:31.08 |  6:01.30 |     24833    |    51937   
+        3  | 11:32.38 |  7:00.01 |     51938    |    83438   
+        4  | 18:32.39 |  4:05.11 |     83439    |   101824   
+        5  | 22:37.50 |  3:00.00 |    101825    |   115324   
+        6  | 25:37.50 |  5:42.15 |    115325    |   140989   
+        7  | 31:19.65 |  5:33.56 |    140990    |   166020   
+        8  | 36:53.46 |  3:50.57 |    166021    |   183327   
+
+
+Range status and errors
+
+Selected range
+
+     Filename D:\bki71\Belphegor\Belphegor - Blood Magick Necromance (LE, Nuclear Blast  NB 2653-2 27361 26532).wav
+
+     Peak level 99.2 %
+     Range quality 100.0 %
+     Test CRC A599B42B
+     Copy CRC A599B42B
+     Copy OK
+
+No errors occurred
+
+ 
+AccurateRip summary
+ 
+Track  1  cannot be verified as accurate (confidence 3)  [87BF1FFD], AccurateRip returned [BD9A0FC4]
+Track  2  cannot be verified as accurate (confidence 3)  [A25AAD32], AccurateRip returned [B789E7A1]
+Track  3  cannot be verified as accurate (confidence 3)  [70CDB04E], AccurateRip returned [D3231AB3]
+Track  4  cannot be verified as accurate (confidence 3)  [2A7C92C1], AccurateRip returned [39E828EE]
+Track  5  cannot be verified as accurate (confidence 3)  [A7184A65], AccurateRip returned [189A11D2]
+Track  6  cannot be verified as accurate (confidence 3)  [F810B4CD], AccurateRip returned [AA3F8B92]
+Track  7  cannot be verified as accurate (confidence 3)  [4F861012], AccurateRip returned [48C1BD46]
+Track  8  cannot be verified as accurate (confidence 3)  [21B3F6B0], AccurateRip returned [28BBFB00]
+ 
+No tracks could be verified as accurate
+You may have a different pressing from the one(s) in the database
+
+End of status report

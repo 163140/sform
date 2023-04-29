@@ -1,0 +1,136 @@
+EAC extraction logfile from 12. November 2007, 17:36 for CD
+Apocalyptica / Apocalyptica
+
+Used drive  : _NEC    DVD_RW ND-2500A   Adapter: 3  ID: 0
+Read mode   : Secure with NO C2, accurate stream, disable cache
+Read offset correction : 48
+Overread into Lead-In and Lead-Out : No
+
+Used output format : C:\Program Files\FLAC\flac.exe   (User Defined Encoder)
+                     192 kBit/s
+                     Additional command line options : -V -8 -T "artist=%a" -T "title=%t" -T "album=%g" -T "date=%y" -T "tracknumber=%n" -T "genre=%m" %s
+
+Other options      : 
+    Fill up missing offset samples with silence : Yes
+    Delete leading and trailing silent blocks : No
+    Native Win32 interface for Win NT & 2000
+
+
+Track  1
+     Filename C:\Apocalyptica - Apocalyptica\01 - Apocalyptica - Life Burns!.wav
+
+     Pre-gap length  0:00:02.00
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC A86C70A6
+     Copy CRC A86C70A6
+     Copy OK
+
+Track  2
+     Filename C:\Apocalyptica - Apocalyptica\02 - Apocalyptica - Quutamo.wav
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 81A0B319
+     Copy CRC 81A0B319
+     Copy OK
+
+Track  3
+     Filename C:\Apocalyptica - Apocalyptica\03 - Apocalyptica - Distraction.wav
+
+     Pre-gap length  0:00:49.02
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 972BFBCE
+     Copy CRC 972BFBCE
+     Copy OK
+
+Track  4
+     Filename C:\Apocalyptica - Apocalyptica\04 - Apocalyptica - Bittersweet.wav
+
+     Pre-gap length  0:00:03.28
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC C5385545
+     Copy CRC C5385545
+     Copy OK
+
+Track  5
+     Filename C:\Apocalyptica - Apocalyptica\05 - Apocalyptica - Misconstruction.wav
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 6C6BD35E
+     Copy CRC 6C6BD35E
+     Copy OK
+
+Track  6
+     Filename C:\Apocalyptica - Apocalyptica\06 - Apocalyptica - Fisheye.wav
+
+     Peak level 99.6 %
+     Track quality 100.0 %
+     Test CRC 22799A77
+     Copy CRC 22799A77
+     Copy OK
+
+Track  7
+     Filename C:\Apocalyptica - Apocalyptica\07 - Apocalyptica - Farewell.wav
+
+     Pre-gap length  0:00:02.66
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 55AC5DAE
+     Copy CRC 55AC5DAE
+     Copy OK
+
+Track  8
+     Filename C:\Apocalyptica - Apocalyptica\08 - Apocalyptica - Fatal Error.wav
+
+     Pre-gap length  0:00:01.97
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 36F78740
+     Copy CRC 36F78740
+     Copy OK
+
+Track  9
+     Filename C:\Apocalyptica - Apocalyptica\09 - Apocalyptica - Betrayal,Forgiveness.wav
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 3E9E82E2
+     Copy CRC 3E9E82E2
+     Copy OK
+
+Track 10
+     Filename C:\Apocalyptica - Apocalyptica\10 - Apocalyptica - Ruska.wav
+
+     Pre-gap length  0:00:03.14
+
+     Peak level 98.3 %
+     Track quality 100.0 %
+     Test CRC 095757C0
+     Copy CRC 095757C0
+     Copy OK
+
+Track 11
+     Filename C:\Apocalyptica - Apocalyptica\11 - Apocalyptica - Deathzone & En Vie.wav
+
+     Pre-gap length  0:00:03.81
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC B8850943
+     Copy CRC B8850943
+     Copy OK
+
+No errors occured
+
+
+End of status report
+

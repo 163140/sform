@@ -1,0 +1,83 @@
+Exact Audio Copy V1.0 beta 3 from 29. August 2011
+
+EAC extraction logfile from 5. January 2013, 22:07
+
+Flame of War / Europa; Or, the Spirit Among the Ruins
+
+Used drive  : ASUS    DRW-22B2L   b   Adapter: 5  ID: 5
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 6
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 128 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "Date=%year%" -T "Genre=%genre%" %source%
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  2:32.71 |         0    |    11470   
+        2  |  2:32.71 | 11:59.29 |     11471    |    65424   
+        3  | 14:32.25 |  9:50.73 |     65425    |   109747   
+        4  | 24:23.23 |  4:22.02 |    109748    |   129399   
+        5  | 28:45.25 |  8:55.66 |    129400    |   169590   
+        6  | 37:41.16 | 12:05.52 |    169591    |   224017   
+
+
+Range status and errors
+
+Selected range
+
+     Filename C:\Новая папка\Flame of War - Europa; Or, the Spirit Among the Ruins.wav
+
+     Peak level 98.1 %
+     Extraction speed 3.1 X
+     Range quality 100.0 %
+     Test CRC 20B346B6
+     Copy CRC 20B346B6
+     Copy OK
+
+No errors occurred
+
+ 
+AccurateRip summary
+ 
+Track  1  accurately ripped (confidence 1)  [8D267C82]  (AR v1)
+Track  2  accurately ripped (confidence 1)  [934A3454]  (AR v1)
+Track  3  accurately ripped (confidence 1)  [FBE0D224]  (AR v1)
+Track  4  accurately ripped (confidence 1)  [AF5D0E15]  (AR v1)
+Track  5  accurately ripped (confidence 1)  [6BCC5556]  (AR v1)
+Track  6  accurately ripped (confidence 1)  [20A5C07C]  (AR v1)
+ 
+All tracks accurately ripped
+
+End of status report
+
+---- CUETools DB Plugin V2.1.4
+
+[CTDB TOCID: Si5t7DmiLDKC3JZTTXFNz0Khauc-] found
+Submit result: already submitted
+Track | CTDB Status
+  1   | (1/1) Accurately ripped
+  2   | (1/1) Accurately ripped
+  3   | (1/1) Accurately ripped
+  4   | (1/1) Accurately ripped
+  5   | (1/1) Accurately ripped
+  6   | (1/1) Accurately ripped
+
+
+==== Log checksum 26F8A709F9304E85A21F3D0B0005AFE6E2B2B1CDA8A6B0795852FD8F2CB208C7 ====

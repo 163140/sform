@@ -1,0 +1,136 @@
+Exact Audio Copy V1.0 beta 1 from 15. November 2010
+
+EAC extraction logfile from 7. September 2011, 2:59
+
+Wolves In The Throne Room / Celestial Lineage
+
+Used drive  : HL-DT-STDVDRAM GU10N   Adapter: 0  ID: 1
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 667
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+Gap handling                                : Appended to previous track
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 320 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "artist=%a" -T "title=%t" -T "album=%g" -T "date=%y" -T "tracknumber=%n" -T "genre=%m" %s 
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 | 11:41.70 |         0    |    52644   
+        2  | 11:41.70 |  1:54.58 |     52645    |    61252   
+        3  | 13:36.53 |  7:09.55 |     61253    |    93482   
+        4  | 20:46.33 |  1:28.17 |     93483    |   100099   
+        5  | 22:14.50 |  5:26.23 |    100100    |   124572   
+        6  | 27:40.73 | 10:16.32 |    124573    |   170804   
+        7  | 37:57.30 | 10:57.55 |    170805    |   220134   
+
+
+Track  1
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\01 - Thuja Magus Imperium.wav
+
+     Pre-gap length  0:00:02.00
+
+     Peak level 99.3 %
+     Extraction speed 1.3 X
+     Track quality 100.0 %
+     Test CRC 5B6420F0
+     Copy CRC 5B6420F0
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  2
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\02 - Permanent Changes In Consciousness.wav
+
+     Peak level 87.2 %
+     Extraction speed 1.1 X
+     Track quality 100.0 %
+     Test CRC F328F8D3
+     Copy CRC F328F8D3
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  3
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\03 - Subterranean Initiation.wav
+
+     Peak level 100.0 %
+     Extraction speed 1.6 X
+     Track quality 100.0 %
+     Test CRC 219F16BD
+     Copy CRC 219F16BD
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  4
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\04 - Rainbow Illness.wav
+
+     Peak level 70.1 %
+     Extraction speed 1.3 X
+     Track quality 100.0 %
+     Test CRC 0AA20D5C
+     Copy CRC 0AA20D5C
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  5
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\05 - Woodland Cathedral.wav
+
+     Peak level 99.1 %
+     Extraction speed 1.8 X
+     Track quality 100.0 %
+     Test CRC 1A7E11D3
+     Copy CRC 1A7E11D3
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  6
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\06 - Astral Blood.wav
+
+     Peak level 99.7 %
+     Extraction speed 2.1 X
+     Track quality 100.0 %
+     Test CRC 41D7A9DC
+     Copy CRC 41D7A9DC
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  7
+
+     Filename E:\Wolves In The Throne Room - 2011 - Celestial Lineage\07 - Prayer Of Transformation.wav
+
+     Peak level 100.0 %
+     Extraction speed 2.3 X
+     Track quality 100.0 %
+     Test CRC 100FE368
+     Copy CRC 100FE368
+     Track not present in AccurateRip database
+     Copy OK
+
+
+None of the tracks are present in the AccurateRip database
+
+No errors occurred
+
+End of status report
+
+==== Log checksum E5C829128C318347B8E8BA1415A4CCC1E6AEA123C67D68770EF2A00A9DB33835 ====

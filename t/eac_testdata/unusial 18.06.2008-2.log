@@ -1,0 +1,114 @@
+EAC extraction logfile from 18. June 2008, 10:38 for CD
+Ajattara / Kuolema
+
+Used drive  : HL-DT-STDVDRAM GSA-4167B   Adapter: 0  ID: 0
+Read mode   : Secure with NO C2, accurate stream, disable cache
+Read offset correction : 667
+Overread into Lead-In and Lead-Out : No
+
+Used output format : F:\Program Files\FLAC\flac.exe   (User Defined Encoder)
+                     320 kBit/s
+                     Additional command line options : -8 -A tukey(0.25) -A gauss(0.1875) -b 4096 -V -T "artist=%a" -T "title=%t" -T "album=%g" -T "date=%y" -T "tracknumber=%n" -T "genre=%m" %s --sector-align
+
+Other options      : 
+    Fill up missing offset samples with silence : Yes
+    Delete leading and trailing silent blocks : No
+    Installed external ASPI interface
+
+
+Track  1
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\01 - Ajattara - Antakaa Elää.wav
+
+     Pre-gap length  0:00:10.00
+
+     Peak level 95.7 %
+     Track quality 100.0 %
+     Test CRC 42A97481
+     Copy CRC 42A97481
+     Copy OK
+
+Track  2
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\02 - Ajattara - Surman Henki.wav
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 92954F9E
+     Copy CRC 92954F9E
+     Copy OK
+
+Track  3
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\03 - Ajattara - Haureus.wav
+
+     Peak level 95.7 %
+     Track quality 100.0 %
+     Test CRC 25303F10
+     Copy CRC 25303F10
+     Copy OK
+
+Track  4
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\04 - Ajattara - Huoran Alla.wav
+
+     Peak level 95.8 %
+     Track quality 99.9 %
+     Test CRC 99837133
+     Copy CRC 99837133
+     Copy OK
+
+Track  5
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\05 - Ajattara - Ikiyössä.wav
+
+     Peak level 95.7 %
+     Track quality 100.0 %
+     Test CRC 4C974C3A
+     Copy CRC 4C974C3A
+     Copy OK
+
+Track  6
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\06 - Ajattara - Musta Leski.wav
+
+     Peak level 98.5 %
+     Track quality 100.0 %
+     Test CRC 5783A9BA
+     Copy CRC 5783A9BA
+     Copy OK
+
+Track  7
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\07 - Ajattara - Sielun Särkijä.wav
+
+     Peak level 95.7 %
+     Track quality 99.9 %
+     Test CRC D31C5478
+     Copy CRC D31C5478
+     Copy OK
+
+Track  8
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\08 - Ajattara - Kituvan Kiitos.wav
+
+     Peak level 95.7 %
+     Track quality 100.0 %
+     Test CRC ACCB852E
+     Copy CRC ACCB852E
+     Copy OK
+
+Track  9
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\09 - Ajattara - Helvetissä On Syntisen Taivas.wav
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 806AAF7B
+     Copy CRC 806AAF7B
+     Copy OK
+
+Track 10
+     Filename E:\Rips\Ajattara - 2003 - Kuolema\10 - Ajattara - Rauhassa.wav
+
+     Peak level 98.8 %
+     Track quality 100.0 %
+     Test CRC 7B1D75DC
+     Copy CRC 7B1D75DC
+     Copy OK
+
+No errors occured
+
+
+End of status report

@@ -1,0 +1,92 @@
+Exact Audio Copy V1.0 beta 3 from 29. August 2011
+
+EAC extraction logfile from 19. September 2013, 20:35
+
+Thuban / Zeitgeist
+
+Used drive  : PIONEER DVD-RW  DVR-111D   Adapter: 0  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 48
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 1024 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : D:\Программы\I - Работа с аудио\Exact Audio Copy\Exact Audio Copy V1.0 Beta 3\Flac\flac.exe
+Additional command line options : -8 -V -T "ARTIST=%artist%" -T "TITLE=%title%" -T "ALBUM=%albumtitle%" -T "DATE=%year%" -T "TRACKNUMBER=%tracknr2%" -T "COMPOSER=%composer%" -T "GENRE=%genre%" -T "COMMENT=Ripped by Darkmind" %source% -o %dest%
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  6:01.62 |         0    |    27136   
+        2  |  6:01.62 |  4:02.52 |     27137    |    45338   
+        3  | 10:04.39 |  1:12.02 |     45339    |    50740   
+        4  | 11:16.41 |  2:04.02 |     50741    |    60042   
+        5  | 13:20.43 |  3:59.58 |     60043    |    78025   
+        6  | 17:20.26 |  7:51.73 |     78026    |   113423   
+        7  | 25:12.24 |  1:57.04 |    113424    |   122202   
+        8  | 27:09.28 |  1:17.61 |    122203    |   128038   
+        9  | 28:27.14 |  6:44.19 |    128039    |   158357   
+
+
+Range status and errors
+
+Selected range
+
+     Filename I:\MUSIC\LOSSLESS\METAL\BLACK-DOOM, BLACK, DARK METAL\Thuban\1997 - Zeitgeist\Thuban - Zeitgeist.wav
+
+     Peak level 100.0 %
+     Extraction speed 6.4 X
+     Range quality 100.0 %
+     Test CRC 6A7072FA
+     Copy CRC 6A7072FA
+     Copy OK
+
+No errors occurred
+
+ 
+AccurateRip summary
+ 
+Track  1  not present in database
+Track  2  not present in database
+Track  3  not present in database
+Track  4  not present in database
+Track  5  not present in database
+Track  6  not present in database
+Track  7  not present in database
+Track  8  not present in database
+Track  9  not present in database
+ 
+None of the tracks are present in the AccurateRip database
+
+End of status report
+
+---- CUETools DB Plugin V2.1.5
+
+[CTDB TOCID: VZBYmNitKrhBdfaWFi2LS403nbA-] found
+Submit result: VZBYmNitKrhBdfaWFi2LS403nbA- has been confirmed
+Track | CTDB Status
+  1   | (1/1) Accurately ripped
+  2   | (1/1) Accurately ripped
+  3   | (1/1) Accurately ripped
+  4   | (1/1) Accurately ripped
+  5   | (1/1) Accurately ripped
+  6   | (1/1) Accurately ripped
+  7   | (1/1) Accurately ripped
+  8   | (1/1) Accurately ripped
+  9   | (1/1) Accurately ripped
+
+
+==== Log checksum A85D3512FCE5B7631AC4CC74B36059F1D03F18D1A46D88B79FE5D21C3FB42C8E ====

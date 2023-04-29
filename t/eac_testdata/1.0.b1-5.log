@@ -1,0 +1,175 @@
+Exact Audio Copy V1.0 beta 1 from 15. November 2010
+
+EAC extraction logfile from 12. April 2011, 15:55
+
+Xe-NONE / Dancefloration
+
+Used drive  : Optiarc DVD RW AD-7263S   Adapter: 5  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 48
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+Gap handling                                : Appended to previous track
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 1024 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -6 -V -T "ARTIST=%a" -T "TITLE=%t" -T "ALBUM=%g" -T "DATE=%y" -T "TRACKNUMBER=%n" -T "GENRE=%m" -T "COMMENT=%e" %j--picture="%i"%j %s -o %d
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  4:18.64 |         0    |    19413   
+        2  |  4:18.64 |  4:12.56 |     19414    |    38369   
+        3  |  8:31.45 |  4:31.00 |     38370    |    58694   
+        4  | 13:02.45 |  4:18.71 |     58695    |    78115   
+        5  | 17:21.41 |  4:03.45 |     78116    |    96385   
+        6  | 21:25.11 |  3:52.25 |     96386    |   113810   
+        7  | 25:17.36 |  4:23.05 |    113811    |   133540   
+        8  | 29:40.41 |  4:58.37 |    133541    |   155927   
+        9  | 34:39.03 |  5:03.00 |    155928    |   178652   
+       10  | 39:42.03 |  6:37.25 |    178653    |   208452   
+
+
+Track  1
+
+     Filename C:\Rips\01 - Heartcore.wav
+
+     Pre-gap length  0:00:02.00
+
+     Peak level 99.8 %
+     Extraction speed 2.3 X
+     Track quality 100.0 %
+     Test CRC B071FEB9
+     Copy CRC B071FEB9
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  2
+
+     Filename C:\Rips\02 - Summertime.wav
+
+     Peak level 99.7 %
+     Extraction speed 2.6 X
+     Track quality 100.0 %
+     Test CRC E3687653
+     Copy CRC E3687653
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  3
+
+     Filename C:\Rips\03 - Dreamcity.wav
+
+     Peak level 99.8 %
+     Extraction speed 2.9 X
+     Track quality 100.0 %
+     Test CRC 97B85EEE
+     Copy CRC 97B85EEE
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  4
+
+     Filename C:\Rips\04 - Dance Row.wav
+
+     Peak level 99.8 %
+     Extraction speed 3.1 X
+     Track quality 100.0 %
+     Test CRC 7EEB7D45
+     Copy CRC 7EEB7D45
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  5
+
+     Filename C:\Rips\05 - Faceless.wav
+
+     Peak level 99.8 %
+     Extraction speed 3.3 X
+     Track quality 100.0 %
+     Test CRC BE56EB87
+     Copy CRC BE56EB87
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  6
+
+     Filename C:\Rips\06 - I Seek You.wav
+
+     Peak level 99.8 %
+     Extraction speed 3.5 X
+     Track quality 100.0 %
+     Test CRC 00302C77
+     Copy CRC 00302C77
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  7
+
+     Filename C:\Rips\07 - Cyber Girl.wav
+
+     Peak level 99.8 %
+     Extraction speed 3.7 X
+     Track quality 100.0 %
+     Test CRC 2852AD12
+     Copy CRC 2852AD12
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  8
+
+     Filename C:\Rips\08 - Black HoleTime.wav
+
+     Peak level 99.8 %
+     Extraction speed 4.0 X
+     Track quality 100.0 %
+     Test CRC F05EB9BD
+     Copy CRC F05EB9BD
+     Track not present in AccurateRip database
+     Copy OK
+
+Track  9
+
+     Filename C:\Rips\09 - Vhs.wav
+
+     Peak level 99.8 %
+     Extraction speed 4.2 X
+     Track quality 100.0 %
+     Test CRC 0F0A7D4E
+     Copy CRC 0F0A7D4E
+     Track not present in AccurateRip database
+     Copy OK
+
+Track 10
+
+     Filename C:\Rips\10 - Blood Fire Snow.wav
+
+     Peak level 99.8 %
+     Extraction speed 4.6 X
+     Track quality 100.0 %
+     Test CRC 88E0F851
+     Copy CRC 88E0F851
+     Track not present in AccurateRip database
+     Copy OK
+
+
+None of the tracks are present in the AccurateRip database
+
+No errors occurred
+
+End of status report
+
+==== Log checksum 48B477315D572887FF82269309E28CDAB80965B7DE40CC5205A58D22B8D9AA9C ====

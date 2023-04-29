@@ -1,0 +1,77 @@
+Exact Audio Copy V1.0 beta 3 from 29. August 2011
+
+EAC extraction logfile from 5. January 2013, 17:44
+
+Flame of War / Transcendence
+
+Used drive  : ASUS    DRW-22B2S   Adapter: 0  ID: 0
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 6
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 128 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "Date=%year%" -T "Genre=%genre%" %source%
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 | 14:48.13 |         0    |    66612   
+        2  | 14:48.13 | 15:40.41 |     66613    |   137153   
+        3  | 30:28.54 | 26:49.56 |    137154    |   257884   
+
+
+Range status and errors
+
+Selected range
+
+     Filename C:\Новая папка\Flame of War - Transcendence.wav
+
+     Peak level 98.8 %
+     Extraction speed 8.3 X
+     Range quality 100.0 %
+     Test CRC 3B2FF9E3
+     Copy CRC 3B2FF9E3
+     Copy OK
+
+No errors occurred
+
+ 
+AccurateRip summary
+ 
+Track  1  cannot be verified as accurate (confidence 1)  [9E263348], AccurateRip returned [7464678C]  (AR v2)
+Track  2  cannot be verified as accurate (confidence 1)  [542E75E8], AccurateRip returned [9A92EB2F]  (AR v2)
+Track  3  accurately ripped (confidence 1)  [2D620731]  (AR v1)
+ 
+ 1 трек(и) скопированы точно
+ 2 трек(и) не удалось проверить на точность
+
+Some tracks could not be verified as accurate
+
+End of status report
+
+---- CUETools DB Plugin V2.1.4
+
+[CTDB TOCID: YOMuEOD3J5bNBfiR3UwtsQVSJAs-] found
+Submit result: already submitted
+Track | CTDB Status
+  1   | (1/1) Accurately ripped
+  2   | (1/1) Accurately ripped
+  3   | (1/1) Accurately ripped
+
+
+==== Log checksum AF5EF86D19F643B6672FDCD358C3995898DEE518E3C75D9EFAE0F4C44A0692DD ====

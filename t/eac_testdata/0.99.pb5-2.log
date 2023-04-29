@@ -1,0 +1,224 @@
+Exact Audio Copy V0.99 prebeta 5 from 4. May 2009
+
+EAC extraction logfile from 1. January 2010, 11:06
+
+Apocalyptica / Apocalyptica
+
+Used drive  : MATSHITABD-MLT UJ230AS   Adapter: 0  ID: 1
+
+Read mode               : Secure
+Utilize accurate stream : Yes
+Defeat audio cache      : Yes
+Make use of C2 pointers : No
+
+Read offset correction                      : 102
+Overread into Lead-In and Lead-Out          : No
+Fill up missing offset samples with silence : Yes
+Delete leading and trailing silent blocks   : No
+Null samples used in CRC calculations       : Yes
+Used interface                              : Native Win32 interface for Win NT & 2000
+Gap handling                                : Appended to previous track
+
+Used output format              : User Defined Encoder
+Selected bitrate                : 128 kBit/s
+Quality                         : High
+Add ID3 tag                     : No
+Command line compressor         : C:\Program Files (x86)\Exact Audio Copy\Flac\flac.exe
+Additional command line options : -V -8 -T "artist=%a" -T "title=%t" -T "album=%g" -T "date=%y" -T "tracknumber=%n" -T "genre=%m" %s
+
+
+TOC of the extracted CD
+
+     Track |   Start  |  Length  | Start sector | End sector 
+    ---------------------------------------------------------
+        1  |  0:00.00 |  3:06.42 |         0    |    13991   
+        2  |  3:06.42 |  3:28.09 |     13992    |    29600   
+        3  |  6:34.51 |  3:56.29 |     29601    |    47329   
+        4  | 10:31.05 |  4:26.03 |     47330    |    67282   
+        5  | 14:57.08 |  3:56.09 |     67283    |    84991   
+        6  | 18:53.17 |  4:09.40 |     84992    |   103706   
+        7  | 23:02.57 |  5:33.01 |    103707    |   128682   
+        8  | 28:35.58 |  2:59.56 |    128683    |   142163   
+        9  | 31:35.39 |  5:13.48 |    142164    |   165686   
+       10  | 36:49.12 |  4:39.36 |    165687    |   186647   
+       11  | 41:28.48 |  4:37.10 |    186648    |   207432   
+       12  | 46:05.58 |  3:27.53 |    207433    |   223010   
+       13  | 49:33.36 |  3:28.25 |    223011    |   238635   
+       14  | 53:01.61 |  3:27.57 |    238636    |   254217   
+       15  | 59:01.43 |  7:58.47 |    265618    |   301514   
+
+
+Track  1
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\01 - Life Burns!.wav
+
+     Pre-gap length  0:00:02.00
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC C3228451
+     Copy CRC C3228451
+     Accurately ripped (confidence 1)  [C25B329A]
+     Copy OK
+
+Track  2
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\02 - En Vie.wav
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC DDEDFCA6
+     Copy CRC DDEDFCA6
+     Accurately ripped (confidence 1)  [8A95986E]
+     Copy OK
+
+Track  3
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\03 - Distraction.wav
+
+     Pre-gap length  0:00:01.93
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 7A15162D
+     Copy CRC 7A15162D
+     Accurately ripped (confidence 1)  [A99DF92B]
+     Copy OK
+
+Track  4
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\04 - Bittersweet.wav
+
+     Pre-gap length  0:00:03.28
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC B6FE97A1
+     Copy CRC B6FE97A1
+     Accurately ripped (confidence 1)  [03D5B2D2]
+     Copy OK
+
+Track  5
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\05 - Misconstruction.wav
+
+     Peak level 100.0 %
+     Track quality 99.9 %
+     Test CRC 676A9DC9
+     Copy CRC 676A9DC9
+     Accurately ripped (confidence 1)  [674C8254]
+     Copy OK
+
+Track  6
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\06 - Fisheye.wav
+
+     Peak level 99.5 %
+     Track quality 100.0 %
+     Test CRC 68D467FD
+     Copy CRC 68D467FD
+     Accurately ripped (confidence 1)  [D0D654DD]
+     Copy OK
+
+Track  7
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\07 - Farewell.wav
+
+     Pre-gap length  0:00:02.69
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC E3FE1296
+     Copy CRC E3FE1296
+     Accurately ripped (confidence 1)  [6FFB406E]
+     Copy OK
+
+Track  8
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\08 - Fatal Error.wav
+
+     Pre-gap length  0:00:01.97
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 435E4FBA
+     Copy CRC 435E4FBA
+     Accurately ripped (confidence 1)  [5D1C3729]
+     Copy OK
+
+Track  9
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\09 - Betrayal,Forgiveness.wav
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC C39A400D
+     Copy CRC C39A400D
+     Accurately ripped (confidence 1)  [A193004E]
+     Copy OK
+
+Track 10
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\10 - Ruska.wav
+
+     Pre-gap length  0:00:03.14
+
+     Peak level 98.3 %
+     Track quality 100.0 %
+     Test CRC 56B0A201
+     Copy CRC 56B0A201
+     Accurately ripped (confidence 1)  [324339FE]
+     Copy OK
+
+Track 11
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\11 - Deathzone.wav
+
+     Pre-gap length  0:00:03.81
+
+     Peak level 98.3 %
+     Track quality 100.0 %
+     Test CRC 0D10694A
+     Copy CRC 0D10694A
+     Accurately ripped (confidence 1)  [8AB1DE21]
+     Copy OK
+
+Track 12
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\12 - Quutamo.wav
+
+     Peak level 100.0 %
+     Track quality 100.0 %
+     Test CRC 00B1C34F
+     Copy CRC 00B1C34F
+     Accurately ripped (confidence 1)  [28233D61]
+     Copy OK
+
+Track 13
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\13 - How Far.wav
+
+     Peak level 99.5 %
+     Track quality 100.0 %
+     Test CRC 1AD4EEFA
+     Copy CRC 1AD4EEFA
+     Accurately ripped (confidence 1)  [2BE3C758]
+     Copy OK
+
+Track 14
+
+     Filename C:\Stockage\Rips\Apocalyptica - 2005 - Apocalyptica\14 - Wie Weit.wav
+
+     Peak level 98.9 %
+     Track quality 100.0 %
+     Test CRC 49709212
+     Copy CRC 49709212
+     Accurately ripped (confidence 1)  [040B9190]
+     Copy OK
+
+
+All tracks accurately ripped
+
+No errors occurred
+
+End of status report
