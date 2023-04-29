@@ -32,12 +32,12 @@ sub get_version($File) {# return $Ver
 
 sub ripping_date($File) {  # return "день месяц год"
 	return join " ", $File =~ /file from (\d?\d)\. (.+?) (\d{4}), \d\d:\d\d/;
-	# TODO: а если не изъялось ничего или не полностью?
-	# TODO: а если месяц указан на французском и год стоит впереди?
-}	
+# TODO: а если не изъялось ничего или не полностью?
+# TODO: а если месяц указан на французском и год стоит впереди?
+}
 
 sub accurate_mode($File) { # true/false
-	return (
+return (
 	$File =~ /Read mode\s*:\sSecure/ &&
 	$File =~ /Utilize accurate stream\s:\sYes/ &&
 	$File =~ /Defeat audio cache\s*:\sYes/ &&
