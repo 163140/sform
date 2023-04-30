@@ -122,8 +122,10 @@ sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
 sub track_CRC($File) {... } # (CRC, $Value)
 sub accurately_ripped($File, $Track_num) { ... } # true/false
 sub log_checksum($File) {
-	#return $File =~ /.*Log checksum (\w*) ====/a);
-}
+	# {{{1
+	$File =~ /.*Log checksum (\w*) ====/a);
+	return $1;
+} # }}}1
 
 #TODO: out data format
 
