@@ -129,8 +129,9 @@ sub log_checksum($File) {
 
 #TODO: out data format
 
+=pod
 
-
+=encoding utf8
 
 =head1 NAME
 
@@ -149,6 +150,12 @@ our $VERSION = '0.00';
 
 Извлекает метаданные из логов Extract Audio Copy.
 
+=head1 EXPORT
+
+=head2 L<eac_parse>
+
+Единственная экспортируемая функция, которая  выполняет всю необходимую работу
+
     use Metadata::EAC;
 
     my %foo = eac_parse($Filename);
@@ -156,28 +163,67 @@ our $VERSION = '0.00';
 		%foo:
 		{
 			RIP_DATE => "12 December 2014",
-			ACCURATE_RIPPES => 1,
+			ACCURATE_RIPPED => 1,
 			DISK_CRC => "01234567"
+			LOG_HASH => "............"
 			...etc
 		}
 
-=head1 EXPORT
+=cut
 
-=head2 eac_parse
+=head1 OTHER SUBROUTINES
 
-=head1 SUBROUTINES/METHODS
+Прочие функции которые не должны экспортироваться кроме особых случаев.
 
-=head2 parse
+=head2 I<parse>
+
+Алиас функции eac_parse. Удобен для вызова C<Metadata::EAC::parse($File)>
+
+=head2 I<get_version>
+
+=over 2
+
+=item Определяет версию EAC сделавшей копию диска.
+
+=item C<my $Ver = get_version($Filecontent);>
+
+=item C<say $Ver; # 0.99 or 1.0 or 1.5>
+
+=item Старые или неизвестные версии возвращают B<undef>
+
+=back
+
+=head2 I<ripping_date>
+
+=over 2
+
+=item Определяет дату рипа. Возвращает строку вида "ДД Месяц ГГГГ". Например "24 December 2014". Название месяца B<всегда> по-английски.
+
+=item C<my $Date = ripping_date($Filecontent)>
+
+=back
+
+=head2 I<accurate_mode>
+
+=over 2
+
+=item Определяет был ли использован I<точный> режим. Возвращает 1 или B<undef>
+
+=item C<$A = accurate_mode($Filecontent)>
+
+=back
 
 =cut
 
+=head2 I<disk_CRC>
 
-#=head2 function2
+=over 2
 
-#=cut
+=item Извлекает CRC-сумму диска из LOG-файла. При отсуствии возвращает B<undef>
 
-#sub function2 {
-#}
+=item C<$CRC = disk_CRC($Filecontent)>
+
+=back
 
 =head1 AUTHOR
 
@@ -188,9 +234,6 @@ Alexander Makarov, C<< <163140 at autistici.org> >>
 Please report any bugs or feature requests to C<bug-metadata-eac at rt.cpan.org>, or through
 the web interface at L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=Metadata-EAC>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
-
-
-
 
 =head1 SUPPORT
 
@@ -217,9 +260,17 @@ L<https://metacpan.org/release/Metadata-EAC>
 
 =back
 
-
 =head1 ACKNOWLEDGEMENTS
 
+=head1 LIMITATIONS
+
+=over 4
+
+=item * Парсятся логи только на английском и русском.
+
+=item * Только некоторые версии EAC распознаются в настоящий момент.
+
+=back
 
 =head1 LICENSE AND COPYRIGHT
 
