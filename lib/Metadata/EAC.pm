@@ -1,50 +1,121 @@
+# vim: foldmethod=marker
 package Metadata::EAC;
 
 use v5.36;
+use utf8;
+#binmode(STDOUT, ":utf8");
+#binmode(STDIN, ":utf8");
+#binmode(STDERR, ":utf8");
+
+
 use strict;
 use warnings;
 use Exporter qw(import);
 use Memoize;
+use feature 'unicode_strings';
 use feature "switch";
 no warnings qw( experimental::smartmatch );
 
+
 our @ISA = qw(Exporter);
 our @EXPORT = qw();
-our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum);
+our @EXPORT_OK = qw(eac_parse parse get_version ripping_date accurate_mode disk_CRC log_checksum);
 our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum)]);
 
 
+sub eac_parse($Filename) { parse($Filename); }
 sub parse($Filename) { ... }
 sub parse_1_5($File) { ... }
 sub parse_1_0($File) { ... }
 
 
 sub get_version($File) {# return $Ver
-	my ($Ver) = $File =~ /Audio Copy V(\d.\d.*) from/;
-	given ($Ver) { #нормализуем
-		$Ver = 1		when	/1\.0./;
-		$Ver = 1.5	when	/1\.5/;
-		default { $Ver = undef }
-	}
-	return $Ver;
-}
-
+	# {{{1
+	$File =~ /Audio Copy V(\d.\d\d?).* from/a;
+	if		($1 == 0.99)	{	return 0.99; }
+	elsif	($1 == 1.0)		{ return 1; }
+	elsif	($1 == 1.5)		{ return 1.5; }
+	else								{ return undef; }
+} # }}}
 
 sub ripping_date($File) {  # return "день месяц год"
-	return join " ", $File =~ /file from (\d?\d)\. (.+?) (\d{4}), \d\d:\d\d/;
-# TODO: а если не изъялось ничего или не полностью?
-# TODO: а если месяц указан на французском и год стоит впереди?
-}
+	# {{{1
+	my ($D, $M, $Y) = $File =~ /
+															(?:file\sfrom|,\sвыполненном)\s # англ или рус лог
+															(\d+?)\.\s # день
+															(\w+?)\s # месяц
+															(\d{4}),\s # год
+															\d+?:\d+?
+														/x;
+	$M = month_in_eng($M);
+	return join " ", ($D, $M, $Y) if ($D && $M && $Y);
+	return "Day: $D or undef | Month: $M or undef | Year: $Y or undef";
+# TODO: а если месяц указан на французском и год стоит впереди?. Пока не видел
+# года впереди
+} # }}}1
+
+sub month_in_eng($Text) { # русский и англ месяца ->  англ имя месяца
+	# {{{1
+	my $Month = { # to_eng => ; rus =>   ; eng =>    ; 
+		to_eng => { #{{{2
+			1	=>	"January",	2	=>	"February",	3	=>	"March",
+			4	=>	"April",		5	=>	"May",			6	=>	"June",
+			7	=>	"July",			8	=>	"August",		9	=>	"September",
+			10=>	"October",	11=>	"November",	"12"=>	"December" },
+
+		rus =>(join "\t",("1 января января январю январем январём январе",
+											"2 февраль февраля февралю февралем февралём феврале",
+											"3 март марта марту мартом марте",
+											"4 апрель апреля апрелю апрелем апреле",
+											"5 май мая маю маем мае",
+											"6 июнь июня июню июнем июне",
+											"7 июль июля июлю июлем июле",
+											"8 август августа августу августе августом",
+											"9 сентябрь сентября сентябрю сентябрем сентябрём 
+											сентябре",
+											"10 октябрь октября октябрю октябрем октябрём октябре",
+											"11 ноябрь ноября ноябрю ноябрем ноябрём ноябре",
+											"12 декабрь декабря декабре декабрем декабрём декабре")
+					),
+
+		eng =>(join "\t",("1 January"		,	"2 February"	,	"3 March"			,
+											"4 April"			,	"5 May"				,	"6 June"			,
+											"7 July"			,	"8 August"		,	"9 September"	,
+											"10 October"	, "11 November"	,	"12 December"	)
+					),
+	}; # }}}2
+
+	my $N;
+	($N) = $Month->{eng} =~ /(?:^|\t)(\d\d?)[\w ]*$Text[\w ]*(?:\t|$)/i;
+	($N) = $Month->{rus} =~ /(?:^|\t)(\d\d?)[\w ]*$Text[\w ]*(?:\t|$)/i unless $N;
+	return $Month->{to_eng}->{$N} if defined $N;
+	return undef;
+} # }}}1
 
 sub accurate_mode($File) { # true/false
-return (
-	$File =~ /Read mode\s*:\sSecure/ &&
-	$File =~ /Utilize accurate stream\s:\sYes/ &&
-	$File =~ /Defeat audio cache\s*:\sYes/ &&
-	$File =~ /Make use of C2 pointers\s*:\sNo/);
-}
+	# {{{1
+	my ($R) = $File =~ /(?:	Read\smode\s+?:\sSecure|
+													Режим\sчтения\s+?:\sДостоверность)
+											.*\R*.*
+											(?:	Utilize\saccurate\sstream\s+?:\sYes|
+													Использование\sточного\sпотока\s+?:\sДа)
+											.*\R*.*
+											(?:	Defeat\saudio\scache\s+?:\sYes|
+													Отключение\sкэша\sаудио\s+?:\sДа)
+											.*\R*.*
+											(?:	Make\suse\sof\sC2\spointers\s+?:\sNo|
+													Использование\sуказателей\sC2\s+?:\sНет)
+										/xs;
+return $R;
+} # }}}1
 
-sub disk_CRC($File) { $File =~ /Copy CRC (\w{8})/a; return $1 }
+sub disk_CRC($File) {
+	# {{{1
+	my ($CRC) = $File =~ /(?:Copy\sCRC|CRC\sкопии)\s+(\w{8})/;
+	#TODO: добавить русский вариант
+	my ($Its_a_track_CRC) = $File =~ /Track\s+?1.*?Filename.*?CRC/s;
+	$CRC = undef if (defined $Its_a_track_CRC);
+return $CRC } # }}}1
 
 sub track_len($File, $Track_num) { ... }
 sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
@@ -65,11 +136,11 @@ Metadata::EAC - Извлекатель метаданных из логов Extr
 
 =head1 VERSION
 
-Version 0.01
+Version 0.00
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.00';
 
 
 =head1 SYNOPSIS
@@ -82,12 +153,15 @@ our $VERSION = '0.01';
 
 		%foo:
 		{
-			Album => ....
-			Artist => ....
+			RIP_DATE => "12 December 2014",
+			ACCURATE_RIPPES => 1,
+			DISK_CRC => "01234567"
 			...etc
 		}
 
 =head1 EXPORT
+
+=head2 eac_parse
 
 =head1 SUBROUTINES/METHODS
 
@@ -157,3 +231,4 @@ This is free software, licensed under:
 =cut
 
 1; # End of Metadata::EAC
+
