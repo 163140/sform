@@ -107,7 +107,9 @@ sub accurate_mode($File) { # true/false
 											(?:	Make\suse\sof\sC2\spointers\s+?:\sNo|
 													Использование\sуказателей\sC2\s+?:\sНет)
 										/xs;
-return $R;
+	return $R if	($File =~ /(?:Ошибок\sне\sпроизошло|
+																			No\serrors\soccurred)/xs);
+	return undef;
 } # }}}1
 
 sub disk_CRC($File) {
@@ -204,7 +206,7 @@ our $VERSION = '0.00';
 
 =over 2
 
-=item Определяет был ли использован I<точный> режим. Возвращает 1 или B<undef>
+=item Определяет был ли использован I<точный> режим и проверяет отсуствие ошибок при копировании. Возвращает 1 или B<undef>
 
 =item C<$A = accurate_mode($Filecontent)>
 
