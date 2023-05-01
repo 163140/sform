@@ -123,7 +123,7 @@ sub track_CRC($File) {... } # (CRC, $Value)
 sub accurately_ripped($File, $Track_num) { ... } # true/false
 sub log_checksum($File) {
 	# {{{1
-	$File =~ /.*(?:(Log checksum|Контрольная сумма отчёта) (\w*) ====/a);
+	$File =~ /.*(?:Log checksum|Контрольная сумма отчёта) (\w*) ====/a;
 	return $1;
 } # }}}1
 
