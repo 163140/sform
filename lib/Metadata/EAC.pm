@@ -11,22 +11,23 @@ use utf8;
 use strict;
 use warnings;
 use Exporter qw(import);
-use Memoize;
+#use Memoize;
 use feature 'unicode_strings';
-use feature "switch";
-no warnings qw( experimental::smartmatch );
+#use feature "switch";
+#no warnings qw( experimental::smartmatch );
 
 
 our @ISA = qw(Exporter);
-our @EXPORT = qw();
-our @EXPORT_OK = qw(eac_parse parse get_version ripping_date accurate_mode disk_CRC log_checksum);
+our @EXPORT = qw(eac_parse);
+our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum);
 our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum)]);
 
 
 sub eac_parse($Filename) { parse($Filename); }
 sub parse($Filename) { ... }
-sub parse_1_5($File) { ... }
-sub parse_1_0($File) { ... }
+
+#sub parse_1_5($File) { ... }
+#sub parse_1_0($File) { ... }
 
 
 sub get_version($File) {# return $Ver
@@ -117,10 +118,8 @@ sub disk_CRC($File) {
 	$CRC = undef if (defined $Its_a_track_CRC);
 return $CRC } # }}}1
 
-sub track_len($File, $Track_num) { ... }
-sub track_start_end($File, $Track_num) { ...} # ($start, $end);}
-sub track_CRC($File) {... } # (CRC, $Value)
 sub accurately_ripped($File, $Track_num) { ... } # true/false
+
 sub log_checksum($File) {
 	# {{{1
 	$File =~ /.*(?:Log checksum|Контрольная сумма отчёта) (\w*) ====/a;
