@@ -118,8 +118,6 @@ sub disk_CRC($File) {
 	$CRC = undef if (defined $Its_a_track_CRC);
 return $CRC } # }}}1
 
-sub accurately_ripped($File, $Track_num) { ... } # true/false
-
 sub log_checksum($File) {
 	# {{{1
 	$File =~ /.*(?:Log checksum|Контрольная сумма отчёта) (\w*) ====/a;
