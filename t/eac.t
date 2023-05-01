@@ -52,6 +52,8 @@ my @SKELETON = ("EAC logfile version ...",
 												msg => "Режим точного чтения // accurate_mode"},
 			disk_CRC		 =>	{	result => "25262401",
 												msg => "Чексумма копии // disk_CRC"},
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 ); # }}}
 
@@ -68,6 +70,8 @@ my @LOG_0_99_pb3 = ( "EAC logfile version 0.99 prebeta 3", # 4 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "25262401",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb3-2-ru.log",
@@ -80,6 +84,8 @@ my @LOG_0_99_pb3 = ( "EAC logfile version 0.99 prebeta 3", # 4 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "655CB5C7",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb3-3-ru.log",
@@ -92,6 +98,8 @@ my @LOG_0_99_pb3 = ( "EAC logfile version 0.99 prebeta 3", # 4 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "4063F438",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb3-4-ru.log",
@@ -104,6 +112,8 @@ my @LOG_0_99_pb3 = ( "EAC logfile version 0.99 prebeta 3", # 4 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "EF510829",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 ); # }}}
 
@@ -120,6 +130,8 @@ my @LOG_0_99_pb4 = ( "EAC logfile version 0.99 prebeta 4", # 1 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "3CCAB0FC",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		# UTF-8 ill-formed file
 		# file => "0.99.pb4-2-fin.log",
@@ -138,6 +150,8 @@ my @LOG_0_99_pb5 = ( "EAC logfile version 0.99 prebeta 5", # 6 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "341D7876",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb5-2.log",
@@ -150,6 +164,8 @@ my @LOG_0_99_pb5 = ( "EAC logfile version 0.99 prebeta 5", # 6 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb5-3.log",
@@ -162,6 +178,8 @@ my @LOG_0_99_pb5 = ( "EAC logfile version 0.99 prebeta 5", # 6 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "A599B42B",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb5-4.log",
@@ -174,6 +192,8 @@ my @LOG_0_99_pb5 = ( "EAC logfile version 0.99 prebeta 5", # 6 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "3BE5F785",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb5-5.log",
@@ -186,6 +206,8 @@ my @LOG_0_99_pb5 = ( "EAC logfile version 0.99 prebeta 5", # 6 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "8CCFD743",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "0.99.pb5-6.log",
@@ -198,6 +220,8 @@ my @LOG_0_99_pb5 = ( "EAC logfile version 0.99 prebeta 5", # 6 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		# UTF-8 ill-formed files
 		# file => "0.99.pb5-7.log",
@@ -219,6 +243,8 @@ my @LOG_1_0_b1 = ("EAC logfile version 1.0 beta 1", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "56FA15945C33F1CE8415DE725A9882DD39CF198BD31FAC91F17136EECAA57F1F",
+												msg => "Чексумма лога // log_checksum"},
 		}, #}}}
 		{
 			file => "1.0.b1-2.log",
@@ -231,6 +257,8 @@ my @LOG_1_0_b1 = ("EAC logfile version 1.0 beta 1", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "E1DFC8F7CE07B0CACB16CEEED74F92226A8DB965FC34D8A0222DAE215115CA85",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "1.0.b1-3.log",
@@ -243,6 +271,8 @@ my @LOG_1_0_b1 = ("EAC logfile version 1.0 beta 1", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "E5C829128C318347B8E8BA1415A4CCC1E6AEA123C67D68770EF2A00A9DB33835",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "1.0.b1-4.log",
@@ -255,6 +285,8 @@ my @LOG_1_0_b1 = ("EAC logfile version 1.0 beta 1", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "79E83F5D",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "CDCA0C1251ED70503F1E0124642B6F868B8659B82A55AE5E5BDF52BF00302048",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "1.0.b1-5.log",
@@ -267,6 +299,8 @@ my @LOG_1_0_b1 = ("EAC logfile version 1.0 beta 1", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "48B477315D572887FF82269309E28CDAB80965B7DE40CC5205A58D22B8D9AA9C",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 ); # }}}1
 
@@ -283,6 +317,8 @@ my @LOG_1_0_b3 = ("EAC logfile version 1.0 beta 3", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "1E1DD436",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "1A7C33E43AAC6D719F96146237A845A5BE9EDF18AB598B1B08A51C3764D5BDEA",
+												msg => "Чексумма лога // log_checksum"},
 		}, #}}}
 		{
 			file => "1.0.b3-2.log",
@@ -295,6 +331,8 @@ my @LOG_1_0_b3 = ("EAC logfile version 1.0 beta 3", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "20B346B6",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "26F8A709F9304E85A21F3D0B0005AFE6E2B2B1CDA8A6B0795852FD8F2CB208C7",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "1.0.b3-3.log",
@@ -307,6 +345,8 @@ my @LOG_1_0_b3 = ("EAC logfile version 1.0 beta 3", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "3B2FF9E3",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "AF5EF86D19F643B6672FDCD358C3995898DEE518E3C75D9EFAE0F4C44A0692DD",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "1.0.b3-4-ru.log",
@@ -319,6 +359,8 @@ my @LOG_1_0_b3 = ("EAC logfile version 1.0 beta 3", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "572BBD86",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "934E1ABA5A24D8F93052EE8D0B952ED28D0AD54BE9C4C662D990F131422F1914",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		{
 			file => "1.0.b3-5-ru.log",
@@ -331,6 +373,8 @@ my @LOG_1_0_b3 = ("EAC logfile version 1.0 beta 3", # 5 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "6A7072FA",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "A85D3512FCE5B7631AC4CC74B36059F1D03F18D1A46D88B79FE5D21C3FB42C8E",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 ); # }}}1
 
@@ -347,6 +391,8 @@ my @LOG_1_5 = ("EAC logfile version 1.5", # 1 file
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => "987253F7",
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => "82160162E96B99E448CCDECF0CF154E6D89A18911B7D87C085A77245EC02E043",
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 ); # }}}
 
@@ -364,6 +410,8 @@ my @LOG_UNUSIAL = ("Unusial EAC logfiles (look like very old)", # 2 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 		# UTF-8 ill-formed file
 		# file => "unusial 18.06.2008-1.log",
@@ -379,6 +427,8 @@ my @LOG_UNUSIAL = ("Unusial EAC logfiles (look like very old)", # 2 files
 												msg => "Режим точного чтения // accurate_mode" },
 			disk_CRC		 =>	{	result => undef,
 												msg => "Чексумма копии // disk_CRC" },
+			checksum		 =>	{	result => undef,
+												msg => "Чексумма лога // log_checksum"},
 		}, # }}}
 	]
 ); # }}}
@@ -396,6 +446,8 @@ sub make_tests($Begin_Msg, @List) { # 4 functions
 											 $_->{accurate_mode}{result},	$_->{accurate_mode}{msg});
 		is (disk_CRC			($Filecontent),
 											 $_->{disk_CRC}{result},	$_->{disk_CRC}{msg});
+		is (log_checksum	($Filecontent),
+											 $_->{checksum}{result},			$_->{checksum}{msg});
 	}
 } # }}}
 
@@ -406,7 +458,7 @@ make_tests(@LOG_1_0_b1);		# 5
 make_tests(@LOG_1_0_b3);		# 4
 make_tests(@LOG_1_5);			# 1
 
-my $number_of_tests_run = 4 * (
+my $number_of_tests_run = 5 * (
 	scalar @LOG_0_99_pb3-1	+
 	scalar @LOG_0_99_pb4-1	+
 	scalar @LOG_0_99_pb5-1	+
