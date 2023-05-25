@@ -1,18 +1,21 @@
-# vim: foldmethod=marker
+# vim: foldmethod=marker tabstop=3
 package Metadata::EAC;
 
 use v5.36;
 use utf8;
+use open 'encoding(UTF-8)';
+use feature 'unicode_strings';
+use warnings;
+use strict;
+
 #binmode(STDOUT, ":utf8");
 #binmode(STDIN, ":utf8");
 #binmode(STDERR, ":utf8");
 
-
-use strict;
-use warnings;
 use Exporter qw(import);
+use File::Slurper 'read_text';
+
 #use Memoize;
-use feature 'unicode_strings';
 #use feature "switch";
 #no warnings qw( experimental::smartmatch );
 
@@ -24,11 +27,18 @@ our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode dis
 
 
 sub eac_parse($Filename) { parse($Filename); }
-sub parse($Filename) { ... }
 
-#sub parse_1_5($File) { ... }
-#sub parse_1_0($File) { ... }
-
+sub parse($Filename) {
+ # {{{1
+	my $File = read_text($Filename);
+	return {
+		EAC_VERSION		=> get_version($File	),
+		RIP_DATE			=> ripping_date($File	),
+		ACCURATE_MODE	=> accurate_mode($File),
+		DISK_CRC			=> disk_CRC($File			),
+		LOG_CHKSUM		=> log_checksum($File	)
+	}
+} # }}}1
 
 sub get_version($File) {# return $Ver
 	# {{{1
@@ -168,6 +178,19 @@ our $VERSION = '0.00';
 			...etc
 		}
 
+но можно сделать вызов напрямую:
+
+ my %foo = Metadata::EAC::parse($Filename);
+
+	%foo:
+		{
+			RIP_DATE => "12 December 2014",
+			ACCURATE_RIPPED => 1,
+			DISK_CRC => "01234567"
+			LOG_HASH => "............"
+			...etc
+		}
+
 =cut
 
 =head1 OTHER SUBROUTINES
@@ -221,6 +244,14 @@ our $VERSION = '0.00';
 =item Извлекает CRC-сумму диска из LOG-файла. При отсуствии возвращает B<undef>
 
 =item C<$CRC = disk_CRC($Filecontent)>
+
+=back
+
+=head2 I<log_checksum>
+
+=over 2
+
+=item Извлекает контрольную сумму файла или B<undef>
 
 =back
 
@@ -283,4 +314,3 @@ This is free software, licensed under:
 =cut
 
 1; # End of Metadata::EAC
-
