@@ -1,4 +1,4 @@
-# vim: foldmethod=marker tabstop=3
+# vim: foldmethod=marker tabstop=2
 package Metadata::EAC;
 
 use v5.36;
@@ -8,26 +8,19 @@ use feature 'unicode_strings';
 use warnings;
 use strict;
 
-#binmode(STDOUT, ":utf8");
-#binmode(STDIN, ":utf8");
-#binmode(STDERR, ":utf8");
-
 use Exporter qw(import);
 use File::Slurper 'read_text';
 
-#use Memoize;
-#use feature "switch";
-#no warnings qw( experimental::smartmatch );
+our @ISA					= qw(Exporter);
+our @EXPORT				= qw(eac_parse);
+our @EXPORT_OK		= qw(parse get_version ripping_date accurate_mode disk_CRC
+											 log_checksum);
 
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(eac_parse);
-our @EXPORT_OK = qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum);
-our %EXPORT_TAGS = (TEST => [qw(parse get_version ripping_date accurate_mode disk_CRC log_checksum)]);
-
+our %EXPORT_TAGS	= (TEST =>
+											[qw(parse get_version ripping_date accurate_mode
+													disk_CRC log_checksum)]);
 
 sub eac_parse($Filename) { parse($Filename); }
-
 sub parse($Filename) {
  # {{{1
 	my $File = read_text($Filename);
@@ -309,7 +302,6 @@ This software is Copyright (c) 2023 by Alexander Makarov.
 This is free software, licensed under:
 
   The Artistic License 2.0 (GPL Compatible)
-
 
 =cut
 
