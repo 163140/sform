@@ -1,0 +1,710 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="1200" height="290" onload="init(evt)" viewBox="0 0 1200 290" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Flame graph stack visualization. See https://github.com/brendangregg/FlameGraph for latest version, and http://www.brendangregg.com/flamegraphs.html for examples. -->
+<defs >
+	<linearGradient id="background" y1="0" y2="1" x1="0" x2="0" >
+		<stop stop-color="#eeeeee" offset="5%" />
+		<stop stop-color="#eeeeb0" offset="95%" />
+	</linearGradient>
+</defs>
+<style type="text/css">
+	.func_g:hover { stroke:black; stroke-width:0.5; cursor:pointer; }
+</style>
+<script type="text/ecmascript">
+<![CDATA[
+	var details, svg;
+	function init(evt) { 
+		details = document.getElementById("details").firstChild; 
+		svg = document.getElementsByTagName("svg")[0];
+		searching = 0;
+	}
+
+	// mouse-over for info
+	function s(info) { details.nodeValue = "sub " + info; }
+	function c() { details.nodeValue = ' '; }
+
+	// functions
+	function find_child(parent, name, attr) {
+		var children = parent.childNodes;
+		for (var i=0; i<children.length;i++) {
+			if (children[i].tagName == name)
+				return (attr != undefined) ? children[i].attributes[attr].value : children[i];
+		}
+		return;
+	}
+	function orig_save(e, attr, val) {
+		if (e.attributes["_orig_"+attr] != undefined) return;
+		if (e.attributes[attr] == undefined) return;
+		if (val == undefined) val = e.attributes[attr].value;
+		e.setAttribute("_orig_"+attr, val);
+	}
+	function orig_load(e, attr) {
+		if (e.attributes["_orig_"+attr] == undefined) return;
+		e.attributes[attr].value = e.attributes["_orig_"+attr].value;
+		e.removeAttribute("_orig_"+attr);
+	}
+	function update_text(e) {
+		var r = find_child(e, "rect");
+		var t = find_child(e, "text");
+		var w = parseFloat(r.attributes["width"].value) -3;
+		var txt = find_child(e, "title").textContent.replace(/\([^(]*\)/,"");
+		t.attributes["x"].value = parseFloat(r.attributes["x"].value) +3;
+		
+		// Smaller than this size won't fit anything
+		if (w < 2*12*0.59) {
+			t.textContent = "";
+			return;
+		}
+		
+		t.textContent = txt;
+		// Fit in full text width
+		if (/^ *$/.test(txt) || t.getSubStringLength(0, txt.length) < w)
+			return;
+		
+		for (var x=txt.length-2; x>0; x--) {
+			if (t.getSubStringLength(0, x+2) <= w) { 
+				t.textContent = txt.substring(0,x) + "..";
+				return;
+			}
+		}
+		t.textContent = "";
+	}
+
+	// zoom
+	function zoom_reset(e) {
+		if (e.attributes != undefined) {
+			orig_load(e, "x");
+			orig_load(e, "width");
+		}
+		if (e.childNodes == undefined) return;
+		for(var i=0, c=e.childNodes; i<c.length; i++) {
+			zoom_reset(c[i]);
+		}
+	}
+	function zoom_child(e, x, ratio) {
+		if (e.attributes != undefined) {
+			if (e.attributes["x"] != undefined) {
+				orig_save(e, "x");
+				e.attributes["x"].value = (parseFloat(e.attributes["x"].value) - x - 10) * ratio + 10;
+				if(e.tagName == "text") e.attributes["x"].value = find_child(e.parentNode, "rect", "x") + 3;
+			}
+			if (e.attributes["width"] != undefined) {
+				orig_save(e, "width");
+				e.attributes["width"].value = parseFloat(e.attributes["width"].value) * ratio;
+			}
+		}
+		
+		if (e.childNodes == undefined) return;
+		for(var i=0, c=e.childNodes; i<c.length; i++) {
+			zoom_child(c[i], x-10, ratio);
+		}
+	}
+	function zoom_parent(e) {
+		if (e.attributes) {
+			if (e.attributes["x"] != undefined) {
+				orig_save(e, "x");
+				e.attributes["x"].value = 10;
+			}
+			if (e.attributes["width"] != undefined) {
+				orig_save(e, "width");
+				e.attributes["width"].value = parseInt(svg.width.baseVal.value) - (10*2);
+			}
+		}
+		if (e.childNodes == undefined) return;
+		for(var i=0, c=e.childNodes; i<c.length; i++) {
+			zoom_parent(c[i]);
+		}
+	}
+	function zoom(node) { 
+		var attr = find_child(node, "rect").attributes;
+		var width = parseFloat(attr["width"].value);
+		var xmin = parseFloat(attr["x"].value);
+		var xmax = parseFloat(xmin + width);
+		var ymin = parseFloat(attr["y"].value);
+		var ratio = (svg.width.baseVal.value - 2*10) / width;
+		
+		// XXX: Workaround for JavaScript float issues (fix me)
+		var fudge = 0.0001;
+		
+		var unzoombtn = document.getElementById("unzoom");
+		unzoombtn.style["opacity"] = "1.0";
+		
+		var el = document.getElementsByTagName("g");
+		for(var i=0;i<el.length;i++){
+			var e = el[i];
+			var a = find_child(e, "rect").attributes;
+			var ex = parseFloat(a["x"].value);
+			var ew = parseFloat(a["width"].value);
+			// Is it an ancestor
+			if (0 == 0) {
+				var upstack = parseFloat(a["y"].value) > ymin;
+			} else {
+				var upstack = parseFloat(a["y"].value) < ymin;
+			}
+			if (upstack) {
+				// Direct ancestor
+				if (ex <= xmin && (ex+ew+fudge) >= xmax) {
+					e.style["opacity"] = "0.5";
+					zoom_parent(e);
+					e.onclick = function(e){unzoom(); zoom(this);};
+					update_text(e);
+				}
+				// not in current path
+				else
+					e.style["display"] = "none";
+			}
+			// Children maybe
+			else {
+				// no common path
+				if (ex < xmin || ex + fudge >= xmax) {
+					e.style["display"] = "none";
+				}
+				else {
+					zoom_child(e, xmin, ratio);
+					e.onclick = function(e){zoom(this);};
+					update_text(e);
+				}
+			}
+		}
+	}
+	function unzoom() {
+		var unzoombtn = document.getElementById("unzoom");
+		unzoombtn.style["opacity"] = "0.0";
+		
+		var el = document.getElementsByTagName("g");
+		for(i=0;i<el.length;i++) {
+			el[i].style["display"] = "block";
+			el[i].style["opacity"] = "1";
+			zoom_reset(el[i]);
+			update_text(el[i]);
+		}
+	}	
+
+	// search
+	function reset_search() {
+		var el = document.getElementsByTagName("rect");
+		for (var i=0; i < el.length; i++){
+			orig_load(el[i], "fill")
+		}
+	}
+	function search_prompt() {
+		if (!searching) {
+			var term = prompt("Enter a search term (regexp " +
+			    "allowed, eg: ^ext4_)", "");
+			if (term != null) {
+				search(term)
+			}
+		} else {
+			reset_search();
+			searching = 0;
+			var searchbtn = document.getElementById("search");
+			searchbtn.style["opacity"] = "0.1";
+			searchbtn.firstChild.nodeValue = "Search"
+		}
+	}
+	function search(term) {
+		var re = new RegExp(term);
+		var el = document.getElementsByTagName("g");
+		for (var i=0; i < el.length; i++){
+			var e = el[i];
+			if (e.attributes["class"].value == "func_g") {
+				// Scrape the function name from the onmouseover
+				// callback text. This is a little dirty.
+				var func = e.attributes["onmouseover"].value;
+				if (func != null) {
+					func = func.substr(3);
+					func = func.replace(/ .*/, "");
+					var r = find_child(e, "rect");
+					if (r == null) {
+						// the rect might be wrapped in an anchor
+						// if nameattr href is being used
+						if (r = find_child(e, "a")) {
+						    r = find_child(r, "rect");
+						}
+					}
+				}
+				if (func != null && r != null &&
+				    func.match(re)) {
+					orig_save(r, "fill");
+					r.attributes["fill"].value =
+					    "rgb(230,0,230)";
+					searching = 1;
+				}
+			}
+		}
+		if (searching) {
+			var searchbtn = document.getElementById("search");
+			searchbtn.style["opacity"] = "1.0";
+			searchbtn.firstChild.nodeValue = "Reset Search"
+		}
+	}
+	function searchover(e) {
+		var searchbtn = document.getElementById("search");
+		searchbtn.style["opacity"] = "1.0";
+	}
+	function searchout(e) {
+		var searchbtn = document.getElementById("search");
+		if (searching) {
+			searchbtn.style["opacity"] = "1.0";
+		} else {
+			searchbtn.style["opacity"] = "0.1";
+		}
+	}
+]]>
+</script>
+<rect x="0.0" y="0" width="1200.0" height="290.0" fill="url(#background)"  />
+<text text-anchor="middle" x="600.00" y="24" font-size="17" font-family="Verdana" fill="rgb(0,0,0)"  >Flame Graph</text>
+<text text-anchor="" x="10.00" y="273" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="details" > </text>
+<text text-anchor="" x="10.00" y="24" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="unzoom" onclick="unzoom()" style="opacity:0.0;cursor:pointer" >Reset Zoom</text>
+<text text-anchor="" x="1090.00" y="24" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="search" onmouseover="searchover()" onmouseout="searchout()" onclick="search_prompt()" style="opacity:0.1;cursor:pointer" >Search</text>
+<g class="func_g" onmouseover="s('Test::Builder::ctx (960 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::ctx (960 microseconds, 0.03%)</title><a xlink:href="Test-Builder-pm-40-line.html#185" target="_top"><rect x="1187.6" y="145" width="0.3" height="15.0" fill="rgb(246,165,45)" rx="2" ry="2" />
+<text text-anchor="" x="1190.56" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Exporter::as_heavy (599 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Exporter::as_heavy (599 microseconds, 0.02%)</title><a xlink:href="Exporter-pm-12-line.html#12" target="_top"><rect x="13.4" y="33" width="0.2" height="15.0" fill="rgb(243,94,42)" rx="2" ry="2" />
+<text text-anchor="" x="16.42" y="43.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('XSLoader::load (9,754 microseconds, 0.30%)')" onmouseout="c()" onclick="zoom(this)">
+<title>XSLoader::load (9,754 microseconds, 0.30%)</title><a xlink:href="XSLoader-pm-8-line.html#19" target="_top"><rect x="11.0" y="145" width="3.6" height="15.0" fill="rgb(243,122,41)" rx="2" ry="2" />
+<text text-anchor="" x="14.02" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Util::BEGIN@171 (858 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Util::BEGIN@171 (858 microseconds, 0.03%)</title><a xlink:href="Test2-Util-pm-43-line.html#171" target="_top"><rect x="17.0" y="161" width="0.3" height="15.0" fill="rgb(238,165,36)" rx="2" ry="2" />
+<text text-anchor="" x="19.97" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@27 (552 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@27 (552 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#27" target="_top"><rect x="25.6" y="225" width="0.2" height="15.0" fill="rgb(236,83,35)" rx="2" ry="2" />
+<text text-anchor="" x="28.64" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Util::Facets2Legacy::BEGIN@10 (528 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Util::Facets2Legacy::BEGIN@10 (528 microseconds, 0.02%)</title><a xlink:href="Test2-Util-Facets2Legacy-pm-88-line.html#10" target="_top"><rect x="22.4" y="145" width="0.2" height="15.0" fill="rgb(232,165,30)" rx="2" ry="2" />
+<text text-anchor="" x="25.44" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::ctx (774 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::ctx (774 microseconds, 0.02%)</title><a xlink:href="Test-Builder-pm-40-line.html#185" target="_top"><rect x="1186.4" y="161" width="0.2" height="15.0" fill="rgb(246,165,45)" rx="2" ry="2" />
+<text text-anchor="" x="1189.36" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Event::V2::BEGIN@12 (915 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Event::V2::BEGIN@12 (915 microseconds, 0.03%)</title><a xlink:href="Test2-Event-V2-pm-87-line.html#12" target="_top"><rect x="22.3" y="161" width="0.3" height="15.0" fill="rgb(246,165,45)" rx="2" ry="2" />
+<text text-anchor="" x="25.31" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('open::import (9,943 microseconds, 0.31%)')" onmouseout="c()" onclick="zoom(this)">
+<title>open::import (9,943 microseconds, 0.31%)</title><a xlink:href="open-pm-5-line.html#55" target="_top"><rect x="10.9" y="209" width="3.7" height="15.0" fill="rgb(238,195,36)" rx="2" ry="2" />
+<text text-anchor="" x="13.95" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Encode::BEGIN@56 (4,050 microseconds, 0.13%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Encode::BEGIN@56 (4,050 microseconds, 0.13%)</title><a xlink:href="Encode-pm-9-line.html#56" target="_top"><rect x="12.7" y="113" width="1.4" height="15.0" fill="rgb(235,148,33)" rx="2" ry="2" />
+<text text-anchor="" x="15.66" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Encode::BEGIN@17 (2,262 microseconds, 0.07%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Encode::BEGIN@17 (2,262 microseconds, 0.07%)</title><a xlink:href="Encode-pm-9-line.html#17" target="_top"><rect x="11.5" y="113" width="0.8" height="15.0" fill="rgb(238,148,36)" rx="2" ry="2" />
+<text text-anchor="" x="14.45" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Hub::send (1,518 microseconds, 0.05%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Hub::send (1,518 microseconds, 0.05%)</title><a xlink:href="Test2-Hub-pm-58-line.html#276" target="_top"><rect x="1187.0" y="145" width="0.6" height="15.0" fill="rgb(251,165,51)" rx="2" ry="2" />
+<text text-anchor="" x="1190.01" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@23 (24,018 microseconds, 0.75%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@23 (24,018 microseconds, 0.75%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#23" target="_top"><rect x="14.6" y="225" width="8.8" height="15.0" fill="rgb(243,83,42)" rx="2" ry="2" />
+<text text-anchor="" x="17.60" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::More::UTF8::import (2,766 microseconds, 0.09%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::More::UTF8::import (2,766 microseconds, 0.09%)</title><a xlink:href="Test-More-UTF8-pm-95-line.html#42" target="_top"><rect x="23.5" y="209" width="1.0" height="15.0" fill="rgb(238,165,36)" rx="2" ry="2" />
+<text text-anchor="" x="26.46" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@32 (630 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@32 (630 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#32" target="_top"><rect x="26.7" y="225" width="0.2" height="15.0" fill="rgb(244,83,43)" rx="2" ry="2" />
+<text text-anchor="" x="29.69" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@24 (2,929 microseconds, 0.09%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@24 (2,929 microseconds, 0.09%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#24" target="_top"><rect x="23.4" y="225" width="1.1" height="15.0" fill="rgb(242,83,40)" rx="2" ry="2" />
+<text text-anchor="" x="26.40" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Log::Agent::Message::BEGIN@20 (464 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Log::Agent::Message::BEGIN@20 (464 microseconds, 0.01%)</title><a xlink:href="Log-Agent-Message-pm-30-line.html#20" target="_top"><rect x="13.8" y="65" width="0.2" height="15.0" fill="rgb(231,154,29)" rx="2" ry="2" />
+<text text-anchor="" x="16.84" y="75.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('File::Spec::Unix::BEGIN@4 (1,261 microseconds, 0.04%)')" onmouseout="c()" onclick="zoom(this)">
+<title>File::Spec::Unix::BEGIN@4 (1,261 microseconds, 0.04%)</title><a xlink:href="File-Spec-Unix-pm-97-line.html#4" target="_top"><rect x="24.8" y="209" width="0.5" height="15.0" fill="rgb(237,199,35)" rx="2" ry="2" />
+<text text-anchor="" x="27.81" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::Formatter::BEGIN@7 (1,264 microseconds, 0.04%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::Formatter::BEGIN@7 (1,264 microseconds, 0.04%)</title><a xlink:href="Test-Builder-Formatter-pm-90-line.html#7" target="_top"><rect x="22.8" y="161" width="0.4" height="15.0" fill="rgb(232,165,29)" rx="2" ry="2" />
+<text text-anchor="" x="25.76" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('PerlIO::import (9,834 microseconds, 0.31%)')" onmouseout="c()" onclick="zoom(this)">
+<title>PerlIO::import (9,834 microseconds, 0.31%)</title><a xlink:href="PerlIO-pm-6-line.html#9" target="_top"><rect x="11.0" y="161" width="3.6" height="15.0" fill="rgb(238,200,36)" rx="2" ry="2" />
+<text text-anchor="" x="13.99" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::cmp_ok (9,885 microseconds, 0.31%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::cmp_ok (9,885 microseconds, 0.31%)</title><a xlink:href="Test-Builder-pm-40-line.html#951" target="_top"><rect x="1184.3" y="177" width="3.6" height="15.0" fill="rgb(234,165,31)" rx="2" ry="2" />
+<text text-anchor="" x="1187.29" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::Instance::BEGIN@13 (1,098 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::Instance::BEGIN@13 (1,098 microseconds, 0.03%)</title><a xlink:href="Test2-API-Instance-pm-52-line.html#13" target="_top"><rect x="19.7" y="145" width="0.4" height="15.0" fill="rgb(244,165,43)" rx="2" ry="2" />
+<text text-anchor="" x="22.69" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('PerlIO::Layer::find (9,922 microseconds, 0.31%)')" onmouseout="c()" onclick="zoom(this)">
+<title>PerlIO::Layer::find (9,922 microseconds, 0.31%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#PerlIO__Layer__find" target="_top"><rect x="11.0" y="193" width="3.6" height="15.0" fill="rgb(248,200,48)" rx="2" ry="2" />
+<text text-anchor="" x="13.95" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::BEGIN@89 (324 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::BEGIN@89 (324 microseconds, 0.01%)</title><a xlink:href="Test2-API-pm-49-line.html#89" target="_top"><rect x="21.0" y="161" width="0.1" height="15.0" fill="rgb(238,165,37)" rx="2" ry="2" />
+<text text-anchor="" x="23.96" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('File::Slurper::read_text (508 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>File::Slurper::read_text (508 microseconds, 0.02%)</title><a xlink:href="File-Slurper-pm-101-line.html#52" target="_top"><rect x="1188.8" y="193" width="0.2" height="15.0" fill="rgb(230,199,27)" rx="2" ry="2" />
+<text text-anchor="" x="1191.80" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@15 (637 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@15 (637 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#15" target="_top"><rect x="10.6" y="225" width="0.2" height="15.0" fill="rgb(241,83,40)" rx="2" ry="2" />
+<text text-anchor="" x="13.59" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::make_tests (3,170,129 microseconds, 98.48%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::make_tests (3,170,129 microseconds, 98.48%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#436" target="_top"><rect x="26.9" y="225" width="1162.1" height="15.0" fill="rgb(234,83,32)" rx="2" ry="2" />
+<text text-anchor="" x="29.92" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >main::make_tests</text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::BEGIN@95 (277 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::BEGIN@95 (277 microseconds, 0.01%)</title><a xlink:href="Test2-API-pm-49-line.html#95" target="_top"><rect x="21.9" y="161" width="0.1" height="15.0" fill="rgb(244,165,43)" rx="2" ry="2" />
+<text text-anchor="" x="24.93" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::BEGIN@100 (310 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::BEGIN@100 (310 microseconds, 0.01%)</title><a xlink:href="Test2-API-pm-49-line.html#100" target="_top"><rect x="19.1" y="161" width="0.1" height="15.0" fill="rgb(235,165,34)" rx="2" ry="2" />
+<text text-anchor="" x="22.07" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Log::Agent::BEGIN@23 (504 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Log::Agent::BEGIN@23 (504 microseconds, 0.02%)</title><a xlink:href="Log-Agent-pm-22-line.html#23" target="_top"><rect x="13.2" y="81" width="0.1" height="15.0" fill="rgb(243,154,42)" rx="2" ry="2" />
+<text text-anchor="" x="16.16" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::More::is (13,361 microseconds, 0.42%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::More::is (13,361 microseconds, 0.42%)</title><a xlink:href="Test-More-pm-38-line.html#402" target="_top"><rect x="1183.9" y="209" width="4.9" height="15.0" fill="rgb(232,165,30)" rx="2" ry="2" />
+<text text-anchor="" x="1186.86" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::BEGIN@51 (4,051 microseconds, 0.13%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::BEGIN@51 (4,051 microseconds, 0.13%)</title><a xlink:href="Test2-API-pm-49-line.html#51" target="_top"><rect x="19.3" y="161" width="1.5" height="15.0" fill="rgb(226,165,23)" rx="2" ry="2" />
+<text text-anchor="" x="22.29" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('open::BEGIN@88 (9,910 microseconds, 0.31%)')" onmouseout="c()" onclick="zoom(this)">
+<title>open::BEGIN@88 (9,910 microseconds, 0.31%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#88" target="_top"><rect x="11.0" y="177" width="3.6" height="15.0" fill="rgb(240,195,39)" rx="2" ry="2" />
+<text text-anchor="" x="13.96" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::is_eq (13,016 microseconds, 0.40%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::is_eq (13,016 microseconds, 0.40%)</title><a xlink:href="Test-Builder-pm-40-line.html#803" target="_top"><rect x="1184.0" y="193" width="4.8" height="15.0" fill="rgb(239,165,38)" rx="2" ry="2" />
+<text text-anchor="" x="1186.99" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Encode::BEGIN@53 (828 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Encode::BEGIN@53 (828 microseconds, 0.03%)</title><a xlink:href="Encode-pm-9-line.html#53" target="_top"><rect x="12.3" y="113" width="0.3" height="15.0" fill="rgb(240,148,39)" rx="2" ry="2" />
+<text text-anchor="" x="15.28" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Exporter::export (600 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Exporter::export (600 microseconds, 0.02%)</title><a xlink:href="Exporter-pm-12-line.html#21" target="_top"><rect x="13.4" y="49" width="0.2" height="15.0" fill="rgb(238,94,36)" rx="2" ry="2" />
+<text text-anchor="" x="16.42" y="59.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::Instance::BEGIN@14 (1,698 microseconds, 0.05%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::Instance::BEGIN@14 (1,698 microseconds, 0.05%)</title><a xlink:href="Test2-API-Instance-pm-52-line.html#14" target="_top"><rect x="20.1" y="145" width="0.6" height="15.0" fill="rgb(243,165,42)" rx="2" ry="2" />
+<text text-anchor="" x="23.09" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Storable::BEGIN@83 (354 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Storable::BEGIN@83 (354 microseconds, 0.01%)</title><a xlink:href="Storable-pm-21-line.html#83" target="_top"><rect x="14.0" y="97" width="0.1" height="15.0" fill="rgb(249,166,48)" rx="2" ry="2" />
+<text text-anchor="" x="17.01" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::BEGIN@88 (277 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::BEGIN@88 (277 microseconds, 0.01%)</title><a xlink:href="Test2-API-pm-49-line.html#88" target="_top"><rect x="20.9" y="161" width="0.1" height="15.0" fill="rgb(240,165,39)" rx="2" ry="2" />
+<text text-anchor="" x="23.86" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Log::Agent::BEGIN@37 (924 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Log::Agent::BEGIN@37 (924 microseconds, 0.03%)</title><a xlink:href="Log-Agent-pm-22-line.html#37" target="_top"><rect x="13.7" y="81" width="0.3" height="15.0" fill="rgb(235,154,33)" rx="2" ry="2" />
+<text text-anchor="" x="16.67" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::disk_CRC (310 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::disk_CRC (310 microseconds, 0.01%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#118" target="_top"><rect x="1182.4" y="209" width="0.1" height="15.0" fill="rgb(232,138,30)" rx="2" ry="2" />
+<text text-anchor="" x="1185.43" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Log::Agent::BEGIN@36 (858 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Log::Agent::BEGIN@36 (858 microseconds, 0.03%)</title><a xlink:href="Log-Agent-pm-22-line.html#36" target="_top"><rect x="13.4" y="81" width="0.3" height="15.0" fill="rgb(237,154,35)" rx="2" ry="2" />
+<text text-anchor="" x="16.35" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::BEGIN@36 (1,506 microseconds, 0.05%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::BEGIN@36 (1,506 microseconds, 0.05%)</title><a xlink:href="Test-Builder-pm-40-line.html#36" target="_top"><rect x="22.7" y="177" width="0.5" height="15.0" fill="rgb(237,165,35)" rx="2" ry="2" />
+<text text-anchor="" x="25.69" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::month_in_eng (2,786 microseconds, 0.09%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::month_in_eng (2,786 microseconds, 0.09%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#61" target="_top"><rect x="1182.8" y="193" width="1.1" height="15.0" fill="rgb(246,138,45)" rx="2" ry="2" />
+<text text-anchor="" x="1185.84" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::BEGIN@92 (2,069 microseconds, 0.06%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::BEGIN@92 (2,069 microseconds, 0.06%)</title><a xlink:href="Test2-API-pm-49-line.html#92" target="_top"><rect x="21.1" y="161" width="0.7" height="15.0" fill="rgb(250,165,49)" rx="2" ry="2" />
+<text text-anchor="" x="24.08" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('utf8::BEGIN@4 (1,093 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>utf8::BEGIN@4 (1,093 microseconds, 0.03%)</title><a xlink:href="utf8-pm-2-line.html#4" target="_top"><rect x="10.2" y="209" width="0.4" height="15.0" fill="rgb(237,124,35)" rx="2" ry="2" />
+<text text-anchor="" x="13.18" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Encode::UTF_EBCDIC::BEGIN@178 (358 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Encode::UTF_EBCDIC::BEGIN@178 (358 microseconds, 0.01%)</title><a xlink:href="Encode-pm-9-line.html#178" target="_top"><rect x="14.4" y="113" width="0.1" height="15.0" fill="rgb(243,148,42)" rx="2" ry="2" />
+<text text-anchor="" x="17.41" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::context (692 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::context (692 microseconds, 0.02%)</title><a xlink:href="Test2-API-pm-49-line.html#363" target="_top"><rect x="1186.4" y="145" width="0.2" height="15.0" fill="rgb(230,165,27)" rx="2" ry="2" />
+<text text-anchor="" x="1189.39" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::CORE:match (3,151,864 microseconds, 97.92%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::CORE:match (3,151,864 microseconds, 97.92%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#Metadata__EAC__CORE_match" target="_top"><rect x="27.0" y="193" width="1155.4" height="15.0" fill="rgb(242,138,41)" rx="2" ry="2" />
+<text text-anchor="" x="30.02" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Metadata::EAC::CORE:match</text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Config::FETCH (852 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Config::FETCH (852 microseconds, 0.03%)</title><a xlink:href="Config-pm-46-line.html#66" target="_top"><rect x="17.0" y="129" width="0.3" height="15.0" fill="rgb(250,162,49)" rx="2" ry="2" />
+<text text-anchor="" x="19.97" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Hub::process (737 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Hub::process (737 microseconds, 0.02%)</title><a xlink:href="Test2-Hub-pm-58-line.html#319" target="_top"><rect x="1187.2" y="129" width="0.3" height="15.0" fill="rgb(237,165,35)" rx="2" ry="2" />
+<text text-anchor="" x="1190.25" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Config::AUTOLOAD (821 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Config::AUTOLOAD (821 microseconds, 0.03%)</title><a xlink:href="Config-pm-46-line.html#79" target="_top"><rect x="17.0" y="113" width="0.3" height="15.0" fill="rgb(225,162,22)" rx="2" ry="2" />
+<text text-anchor="" x="19.97" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::ok (522 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::ok (522 microseconds, 0.02%)</title><a xlink:href="Test-Builder-pm-40-line.html#674" target="_top"><rect x="1188.6" y="177" width="0.2" height="15.0" fill="rgb(234,165,32)" rx="2" ry="2" />
+<text text-anchor="" x="1191.57" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@26 (999 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@26 (999 microseconds, 0.03%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#26" target="_top"><rect x="25.3" y="225" width="0.3" height="15.0" fill="rgb(238,83,37)" rx="2" ry="2" />
+<text text-anchor="" x="28.27" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::CORE:match (550 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::CORE:match (550 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#Metadata__EAC__CORE_match" target="_top"><rect x="1182.6" y="193" width="0.2" height="15.0" fill="rgb(242,138,41)" rx="2" ry="2" />
+<text text-anchor="" x="1185.59" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::output (2,685 microseconds, 0.08%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::output (2,685 microseconds, 0.08%)</title><a xlink:href="Test-Builder-pm-40-line.html#1333" target="_top"><rect x="23.5" y="193" width="1.0" height="15.0" fill="rgb(234,165,31)" rx="2" ry="2" />
+<text text-anchor="" x="26.48" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::Stack::BEGIN@8 (1,053 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::Stack::BEGIN@8 (1,053 microseconds, 0.03%)</title><a xlink:href="Test2-API-Stack-pm-57-line.html#8" target="_top"><rect x="20.2" y="129" width="0.4" height="15.0" fill="rgb(230,165,28)" rx="2" ry="2" />
+<text text-anchor="" x="23.18" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::EventFacet::BEGIN@7 (624 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::EventFacet::BEGIN@7 (624 microseconds, 0.02%)</title><a xlink:href="Test2-EventFacet-pm-54-line.html#7" target="_top"><rect x="19.9" y="113" width="0.2" height="15.0" fill="rgb(232,165,29)" rx="2" ry="2" />
+<text text-anchor="" x="22.85" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Util::_check_for_sig_sys (855 microseconds, 0.03%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Util::_check_for_sig_sys (855 microseconds, 0.03%)</title><a xlink:href="Test2-Util-pm-43-line.html#166" target="_top"><rect x="17.0" y="145" width="0.3" height="15.0" fill="rgb(241,165,40)" rx="2" ry="2" />
+<text text-anchor="" x="19.97" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('FindBin::BEGIN@85 (583 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>FindBin::BEGIN@85 (583 microseconds, 0.02%)</title><a xlink:href="FindBin-pm-99-line.html#85" target="_top"><rect x="25.4" y="209" width="0.2" height="15.0" fill="rgb(245,193,44)" rx="2" ry="2" />
+<text text-anchor="" x="28.42" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('DynaLoader::BEGIN@112 (9,698 microseconds, 0.30%)')" onmouseout="c()" onclick="zoom(this)">
+<title>DynaLoader::BEGIN@112 (9,698 microseconds, 0.30%)</title><a xlink:href="PerlIO-encoding-pm-7-line.html#112" target="_top"><rect x="11.0" y="129" width="3.6" height="15.0" fill="rgb(248,159,48)" rx="2" ry="2" />
+<text text-anchor="" x="14.04" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('all (3,218,950 microseconds, 100%)')" onmouseout="c()" onclick="zoom(this)">
+<title>all (3,218,950 microseconds, 100%)</title><rect x="10.0" y="241" width="1180.0" height="15.0" fill="rgb(255,230,55)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="251.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@11 (1,194 microseconds, 0.04%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@11 (1,194 microseconds, 0.04%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#11" target="_top"><rect x="10.1" y="225" width="0.5" height="15.0" fill="rgb(231,83,28)" rx="2" ry="2" />
+<text text-anchor="" x="13.14" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::ctx (1,789 microseconds, 0.06%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::ctx (1,789 microseconds, 0.06%)</title><a xlink:href="Test-Builder-pm-40-line.html#185" target="_top"><rect x="1187.9" y="177" width="0.7" height="15.0" fill="rgb(246,165,45)" rx="2" ry="2" />
+<text text-anchor="" x="1190.92" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Util::BEGIN@7 (285 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Util::BEGIN@7 (285 microseconds, 0.01%)</title><a xlink:href="Test2-Util-pm-43-line.html#7" target="_top"><rect x="17.8" y="161" width="0.1" height="15.0" fill="rgb(232,165,29)" rx="2" ry="2" />
+<text text-anchor="" x="20.78" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::CORE:regcomp (579 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::CORE:regcomp (579 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#Metadata__EAC__CORE_regcomp" target="_top"><rect x="1183.7" y="177" width="0.2" height="15.0" fill="rgb(238,138,36)" rx="2" ry="2" />
+<text text-anchor="" x="1186.65" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::Stack::BEGIN@8 (390 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::Stack::BEGIN@8 (390 microseconds, 0.01%)</title><a xlink:href="Test2-API-Stack-pm-57-line.html#8" target="_top"><rect x="20.6" y="129" width="0.1" height="15.0" fill="rgb(230,165,28)" rx="2" ry="2" />
+<text text-anchor="" x="23.57" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::ok (3,466 microseconds, 0.11%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::ok (3,466 microseconds, 0.11%)</title><a xlink:href="Test-Builder-pm-40-line.html#674" target="_top"><rect x="1186.6" y="161" width="1.3" height="15.0" fill="rgb(234,165,32)" rx="2" ry="2" />
+<text text-anchor="" x="1189.64" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::EventFacet::Trace::BEGIN@7 (737 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::EventFacet::Trace::BEGIN@7 (737 microseconds, 0.02%)</title><a xlink:href="Test2-EventFacet-Trace-pm-53-line.html#7" target="_top"><rect x="19.8" y="129" width="0.3" height="15.0" fill="rgb(232,165,29)" rx="2" ry="2" />
+<text text-anchor="" x="22.81" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@25 (2,181 microseconds, 0.07%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@25 (2,181 microseconds, 0.07%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#25" target="_top"><rect x="24.5" y="225" width="0.8" height="15.0" fill="rgb(240,83,38)" rx="2" ry="2" />
+<text text-anchor="" x="27.47" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::Module::BEGIN@5 (21,895 microseconds, 0.68%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::Module::BEGIN@5 (21,895 microseconds, 0.68%)</title><a xlink:href="Test-Builder-Module-pm-39-line.html#5" target="_top"><rect x="15.3" y="193" width="8.0" height="15.0" fill="rgb(235,165,33)" rx="2" ry="2" />
+<text text-anchor="" x="18.28" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Util::BEGIN@7 (1,339 microseconds, 0.04%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Util::BEGIN@7 (1,339 microseconds, 0.04%)</title><a xlink:href="Test2-Util-pm-43-line.html#7" target="_top"><rect x="17.3" y="161" width="0.5" height="15.0" fill="rgb(232,165,29)" rx="2" ry="2" />
+<text text-anchor="" x="20.29" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Storable::BEGIN@44 (2,685 microseconds, 0.08%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Storable::BEGIN@44 (2,685 microseconds, 0.08%)</title><a xlink:href="Storable-pm-21-line.html#44" target="_top"><rect x="13.0" y="97" width="1.0" height="15.0" fill="rgb(239,166,38)" rx="2" ry="2" />
+<text text-anchor="" x="16.02" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Exporter::import (659 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Exporter::import (659 microseconds, 0.02%)</title><a xlink:href="Exporter-pm-12-line.html#25" target="_top"><rect x="13.4" y="65" width="0.2" height="15.0" fill="rgb(238,94,36)" rx="2" ry="2" />
+<text text-anchor="" x="16.40" y="75.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::BEGIN@18 (12,794 microseconds, 0.40%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::BEGIN@18 (12,794 microseconds, 0.40%)</title><a xlink:href="Test-Builder-pm-40-line.html#18" target="_top"><rect x="18.0" y="177" width="4.7" height="15.0" fill="rgb(236,165,34)" rx="2" ry="2" />
+<text text-anchor="" x="20.99" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::More::BEGIN@22 (22,294 microseconds, 0.69%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::More::BEGIN@22 (22,294 microseconds, 0.69%)</title><a xlink:href="Test-More-pm-38-line.html#22" target="_top"><rect x="15.2" y="209" width="8.2" height="15.0" fill="rgb(245,165,44)" rx="2" ry="2" />
+<text text-anchor="" x="18.22" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@28 (2,069 microseconds, 0.06%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@28 (2,069 microseconds, 0.06%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#28" target="_top"><rect x="25.8" y="225" width="0.8" height="15.0" fill="rgb(235,83,33)" rx="2" ry="2" />
+<text text-anchor="" x="28.84" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Formatter::TAP::print_optimal_pass (483 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Formatter::TAP::print_optimal_pass (483 microseconds, 0.02%)</title><a xlink:href="Test2-Formatter-TAP-pm-91-line.html#130" target="_top"><rect x="1187.3" y="97" width="0.2" height="15.0" fill="rgb(240,165,38)" rx="2" ry="2" />
+<text text-anchor="" x="1190.34" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::log_checksum (575 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::log_checksum (575 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#126" target="_top"><rect x="1182.6" y="209" width="0.2" height="15.0" fill="rgb(226,138,23)" rx="2" ry="2" />
+<text text-anchor="" x="1185.58" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::context (799 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::context (799 microseconds, 0.02%)</title><a xlink:href="Test2-API-pm-49-line.html#363" target="_top"><rect x="1187.6" y="129" width="0.3" height="15.0" fill="rgb(230,165,27)" rx="2" ry="2" />
+<text text-anchor="" x="1190.62" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::BEGIN@17 (3,520 microseconds, 0.11%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::BEGIN@17 (3,520 microseconds, 0.11%)</title><a xlink:href="Test-Builder-pm-40-line.html#17" target="_top"><rect x="16.7" y="177" width="1.3" height="15.0" fill="rgb(238,165,36)" rx="2" ry="2" />
+<text text-anchor="" x="19.70" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Formatter::TAP::write (572 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Formatter::TAP::write (572 microseconds, 0.02%)</title><a xlink:href="Test2-Formatter-TAP-pm-91-line.html#92" target="_top"><rect x="1187.3" y="113" width="0.2" height="15.0" fill="rgb(240,165,38)" rx="2" ry="2" />
+<text text-anchor="" x="1190.31" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::API::context (1,682 microseconds, 0.05%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::API::context (1,682 microseconds, 0.05%)</title><a xlink:href="Test2-API-pm-49-line.html#363" target="_top"><rect x="1188.0" y="161" width="0.6" height="15.0" fill="rgb(230,165,27)" rx="2" ry="2" />
+<text text-anchor="" x="1190.95" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test::Builder::BEGIN@15 (356 microseconds, 0.01%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test::Builder::BEGIN@15 (356 microseconds, 0.01%)</title><a xlink:href="Test-Builder-pm-40-line.html#15" target="_top"><rect x="16.5" y="177" width="0.1" height="15.0" fill="rgb(241,165,40)" rx="2" ry="2" />
+<text text-anchor="" x="19.51" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::BEGIN@20 (10,281 microseconds, 0.32%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::BEGIN@20 (10,281 microseconds, 0.32%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#20" target="_top"><rect x="10.8" y="225" width="3.8" height="15.0" fill="rgb(231,83,29)" rx="2" ry="2" />
+<text text-anchor="" x="13.82" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('main::read_the_log (696 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>main::read_the_log (696 microseconds, 0.02%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-eac-t-1-line.html#35" target="_top"><rect x="1188.8" y="209" width="0.2" height="15.0" fill="rgb(248,83,48)" rx="2" ry="2" />
+<text text-anchor="" x="1191.77" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::accurate_mode (3,151,915 microseconds, 97.92%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::accurate_mode (3,151,915 microseconds, 97.92%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#99" target="_top"><rect x="27.0" y="209" width="1155.4" height="15.0" fill="rgb(250,138,49)" rx="2" ry="2" />
+<text text-anchor="" x="30.00" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Metadata::EAC::accurate_mode</text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Metadata::EAC::ripping_date (2,916 microseconds, 0.09%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Metadata::EAC::ripping_date (2,916 microseconds, 0.09%)</title><a xlink:href="home-ea1a87-Soft-My-sm2f-t-lib-Metadata-EAC-pm-106-line.html#45" target="_top"><rect x="1182.8" y="209" width="1.1" height="15.0" fill="rgb(245,138,45)" rx="2" ry="2" />
+<text text-anchor="" x="1185.80" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Encode::BEGIN@7 (628 microseconds, 0.02%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Encode::BEGIN@7 (628 microseconds, 0.02%)</title><a xlink:href="Encode-pm-9-line.html#7" target="_top"><rect x="14.1" y="113" width="0.3" height="15.0" fill="rgb(232,148,29)" rx="2" ry="2" />
+<text text-anchor="" x="17.15" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+<g class="func_g" onmouseover="s('Test2::Event::Ok::BEGIN@8 (1,810 microseconds, 0.06%)')" onmouseout="c()" onclick="zoom(this)">
+<title>Test2::Event::Ok::BEGIN@8 (1,810 microseconds, 0.06%)</title><a xlink:href="Test2-Event-Ok-pm-64-line.html#8" target="_top"><rect x="21.2" y="145" width="0.6" height="15.0" fill="rgb(230,165,28)" rx="2" ry="2" />
+<text text-anchor="" x="24.16" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</a>
+</g>
+</svg>
