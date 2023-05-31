@@ -11,66 +11,145 @@ use strict;
 use Exporter qw(import);
 use File::Slurper 'read_text';
 
+use constant DEBUG => 0;
+use if DEBUG, "Smart::Comments";
+
+
 our @ISA					= qw(Exporter);
 our @EXPORT				= qw(cue_parse);
-our @EXPORT_OK		= qw(parse);
+our @EXPORT_OK		= qw(parse get_date get_genre get_diskid get_album
+											 get_totaldiscs get_catalognum get_comment get_reissue);
 
-our %EXPORT_TAGS	= (TEST =>
-											[qw(parse)]);
+our %EXPORT_TAGS	= (TEST => [ qw(parse
+											get_date get_genre get_diskid get_album get_totaldiscs
+											get_catalognum get_comment get_reissue
+											)]);
 
 sub cue_parse($Filename) { parse($Filename); }
 sub parse($Filename) {
 	my $File = read_text($Filename);
-	return {
-		...
-		#RIP_DATE			=> ripping_date($File	),
-		#ACCURATE_MODE	=> accurate_mode($File),
-		#DISK_CRC			=> disk_CRC($File			),
-		#LOG_CHKSUM		=> log_checksum($File	)
-	}
+	return undef;
 }
 
 # Utility functions
 
 sub get_tag($File, $Tag, $Pattern) {
-	$File =~ /REM\s+$Tag\s+"?($Pattern)"?.*\n/;
-	return $1;
-}
+# {{{ 1
+	### Получен таг: $Tag
+	### Получен паттерн: $Pattern
+	$File =~ /REM\s+$Tag\s+$Pattern.*?\n/;
+	my $Data = $1;
+	### Извлечены данные: $Data
+	return $Data;
+} # }}} 1
 
 sub get_one_track_meta($File, $Tracknum) {
 	my ($Title, $Performer) =
 			$File =~ /TRACK\s+$Tracknum\sAUDIO.*?TITLE\s+"(.*?)".*?
 								PERFORMER\s"(.*?)".*?INDEX
-							 /xs
-	return {
-						TRACKNUM=>$Tracknum,
-						TITLE =>$Title,
-						PERFORMER => $Performer
-						DISCNUMBER => get_disk_number($File)
-				 };
+							 /xs;
+	return {	TRACKNUM	=> $Tracknum,
+						TITLE			=> normalize_name($Title),
+						PERFORMER => normalize_name($Performer),
+						DISCNUMBER=> get_disk_number($File) };
+}
+
+sub normalize_name($Tx) {
+	### Нормализуем имя: $Tx
+	$Tx =~ s/^\s*//		;
+	### т.е удаляем пробелы в начале: $Tx
+
+	$Tx =~ s/\s*$//		;
+	### и конце: $Tx
+
+	$Tx =~ s/\s+/ /g	;
+	### между словами оставляем по одному пробелу: $Tx
+
+	$Tx =~ s/([\w'-]+)/\u\L$1/g;
+	### Каждое слово с большой буквы: $Tx
+	$Tx =~ s/(\s) (
+									(?:By\s) | (?:Of\s) | (?:A\s) | (?:And\s) | (?:To\s) |
+									(?:Pt\s) | (?:Pt\.) | (?:Ed\s)| (?:Ed\. ) | (?:Or\s)
+								)
+									/$1\l$2/xg;
+	my $t1  = 14;
+	my @t2=(1,2,3);
+	### но некоторые слова с маленькой: $Tx
+	return $Tx;
 }
 #
 
-sub get_date				($File)	{ get_tag($File, "DATE"				, '\d{4}'		); }
-sub get_genre				($File)	{ get_tag($File, "GENRE"			, '.*?'			); }
-sub get_diskid			($File)	{ get_tag($File, "DISKID"			, '\w{8}'		); }
-sub get_album				($File)	{ get_tag($File, "TITLE"			, '.*?'			); }
-sub get_totaldiscs 	($File) { get_tag($File, "TOTALDISCS"	,	'\d+'			); }
-sub get_catalognum 	($File) { get_tag($File, "CATALOG"		,	'\w+'			); }
+sub get_diskid			($File)	{ get_tag($File, "DISCID"			, '(\w{8})'	); }
+sub get_totaldiscs 	($File) { get_tag($File, "TOTALDISCS"	,	'(\d+)'		); }
 
-#sub get_genre	($File)	{ $File =~ /REM\s+GENRE\s+"(.*?)"\n/	; return $1; }
-#sub get_diskid($File)	{ $File =~ /REM\s+DISCID\s+(\w{8})/		; return $1; }
-#sub get_album	($File)	{ $File =~ /REM\s+TITLE\s+"(.*?)"\n/	; return $1; }
-
-sub get_comment($File){
-	my ($Comment) = ($File =~ /REM\s+COMMENT\s+"(.*?)"/);
-
-	my $Useless=0; 
-	$Useless = 1 if $Comment =~ /ExactAudioCopy/; # других значений я не видел
-
-	return undef		if $Useless	;
-	return $Comment							;
+sub get_date				($File)	{ 
+	$File =~ /REM\s+DATE\s+(\d\d\d\d)/;
+	### $1
+	return $1;
 }
+
+sub get_catalognum 	($File) {
+	my ($Catnum) = $File =~ /CATALOG\s+(\w+)/;
+	$Catnum = undef if ($Catnum == '0000000000000');
+	return $Catnum;
+}
+
+
+sub get_genre				($File)	{
+# {{{1
+	my ($Genre) = $File =~ /\s*REM\s+GENRE\s+"(.*)"/; # REM GENRE "Metal"
+	### Ищем строку вида REM GENRE "Metal": $Genre
+	($Genre) = $File =~ /\s*REM\s+GENRE\s+(.*)/ if (not $Genre);
+	### Ищем строку вида REM GENRE Metal: $Genre
+	### Извлекли жанр: $Genre
+	
+	my $Case = 0;
+	$Case = 1 if (defined($Genre) and ($Genre =~ /Black metal; Dark metal/));
+	$Genre = "Dark & Black Metal" if ($Case == 1);
+	### и обработали если это спец. случай: $Genre
+	return $Genre;
+} # }}}1
+
+
+sub get_album				($File) {
+# {{{ 1
+	my ($Album) = $File =~ /\s*TITLE\s+"(.*)".*?\n/;
+	my ($Date) = $File =~ /REM\s+DATE\s(\d{4})/;
+	$Date = $Date || '';
+	### Извлечение названия альбома и даты альбома
+	### $Album
+	### $Date
+
+	$Album =~ s/ [\(\[] [Rr] eissue .+? [\]\)] //x;
+	### Минус упоминание о перевыпуске типа "[Reissue 2009]": $Album
+
+	$Album =~ s/ [\(\[] .*CD\s?\d+.* [\]\)] //x;
+	$Album =~ s/ [\(\[] .*NB\s+\d+.* [\]\)] //x;
+	### Удаляем упоминание о диске и его каталожном номере: $Album
+
+	$Album =~ s/ \([Ee][Pp]\) //x;
+	### Удаляем упоминание о EP: $Album
+
+	$Album =~ s/ [\(\[] .*$Date.* [\]\)] //x;
+	$Album =~ s/$Date//;
+	### Удаляем дату альбома в названии: $Album
+
+	$Album = normalize_name($Album);
+	### Нормализуем имя альбома: $Album
+	
+	### Бывают специальные случаи
+	$Album = "SETI" if $Album eq "Seti";
+
+	return $Album;
+} # }}}1
+
+sub get_comment($File) {
+# {{{1
+	my ($Comment) = ($File =~ /REM\s+COMMENT\s+"(.*?)"/);
+	my $Useless = defined($Comment) and ($Comment =~ /ExactAudioCopy/);
+	$Comment = undef if $Useless;
+	return $Comment							;
+} # }}}1
 
 
 sub get_tracks_meta($File) {
@@ -138,7 +217,7 @@ our $VERSION = '0.00';
 			REISSUE => 2009,							# если это перевыпуск альбома или undef
 			TOTALDISKS => 2								# или undef
 			TRACKS => {
-									01 => {	
+									01 => {
 													ISRC => PLA640906601, # или undef
 													TRACKNUM => 01,
 													PERFORMER => "Ajattara",
@@ -170,7 +249,7 @@ our $VERSION = '0.00';
 			GENRE => "Black Metal"
 			REISSUE => 2009,							# если это перевыпуск альбома или undef
 			TRACKS => {
-									01 => {	
+									01 => {
 													ISRC => PLA640906601, # или undef
 													TRACKNUM => 01,
 													PERFORMER => "Ajattara",
