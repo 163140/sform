@@ -1,0 +1,114 @@
+REM GENRE Symphonic Metal
+REM DATE 2003
+REM DISCID FD10B012
+CATALOG 0602498658307
+PERFORMER "Apocalyptica"
+TITLE "Reflections (Revised)"
+FILE "Apocalyptica - Reflections Revised.ape" WAVE
+  TRACK 01 AUDIO
+    TITLE "Prologue (Apprehension)"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208251
+    INDEX 01 00:00:00
+  TRACK 02 AUDIO
+    TITLE "No Education"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208252
+    INDEX 00 03:09:72
+    INDEX 01 03:11:54
+  TRACK 03 AUDIO
+    TITLE "Faraway"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208253
+    INDEX 00 06:27:46
+    INDEX 01 06:29:28
+  TRACK 04 AUDIO
+    TITLE "Somewhere Around Nothing"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208254
+    INDEX 00 11:40:74
+    INDEX 01 11:42:56
+  TRACK 05 AUDIO
+    TITLE "Drive"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208255
+    INDEX 00 15:50:03
+    INDEX 01 15:51:60
+  TRACK 06 AUDIO
+    TITLE "Cohkka"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208256
+    INDEX 00 19:11:44
+    INDEX 01 19:13:26
+  TRACK 07 AUDIO
+    TITLE "Conclusion"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208257
+    INDEX 00 23:39:16
+    INDEX 01 23:40:73
+  TRACK 08 AUDIO
+    TITLE "Resurrection"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208259
+    INDEX 00 27:46:01
+    INDEX 01 27:47:58
+  TRACK 09 AUDIO
+    TITLE "Heat"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208263
+    INDEX 00 31:20:61
+    INDEX 01 31:22:43
+  TRACK 10 AUDIO
+    TITLE "Cortege"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208266
+    INDEX 00 34:42:31
+    INDEX 01 34:44:13
+  TRACK 11 AUDIO
+    TITLE "Pandemonium"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208270
+    INDEX 00 39:11:23
+    INDEX 01 39:13:05
+  TRACK 12 AUDIO
+    TITLE "Toreador II"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208271
+    INDEX 00 41:17:29
+    INDEX 01 41:19:11
+  TRACK 13 AUDIO
+    TITLE "Epilogue (Relief)"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120208272
+    INDEX 00 45:14:12
+    INDEX 01 45:15:69
+  TRACK 14 AUDIO
+    TITLE "Seemann (feat. Nina Hagen) (album version)"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120305329
+    INDEX 00 48:43:26
+    INDEX 01 48:45:08
+  TRACK 15 AUDIO
+    TITLE "Faraway vol.2 (feat. Linda) (extended version)"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120301631
+    INDEX 00 53:26:37
+    INDEX 01 53:28:19
+  TRACK 16 AUDIO
+    TITLE "Delusion"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120300146
+    INDEX 00 58:39:66
+    INDEX 01 58:41:48
+  TRACK 17 AUDIO
+    TITLE "Perdition"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120301387
+    INDEX 00 62:50:42
+    INDEX 01 62:52:24
+  TRACK 18 AUDIO
+    TITLE "Leave Me Alone"
+    PERFORMER "Apocalyptica"
+    ISRC DEN120300147
+    INDEX 00 67:00:34
+    INDEX 01 67:02:16
